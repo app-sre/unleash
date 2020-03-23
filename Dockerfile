@@ -1,11 +1,10 @@
 FROM        node:10-alpine
 
-COPY        unleash ./
+COPY        . .
 
-WORKDIR     unleash/
-
-RUN         npm install unleash-server -g
+RUN         yarn install --production
 
 EXPOSE      4242
 
-ENTRYPOINT  ["unleash"]
+ENTRYPOINT  ["node"]
+CMD         ["index.js"]
