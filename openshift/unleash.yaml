@@ -1,0 +1,76 @@
+---
+apiVersion: v1
+kind: Template
+metadata:
+  name: unleash
+objects:
+- apiVersion: extensions/v1beta1
+  kind: Deployment
+  metadata:
+    labels:
+      app: unleash
+    name: unleash
+  spec:
+    replicas: 1
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 0
+        maxSurge: 1
+    selector:
+      matchLabels:
+        app: unleash
+    template:
+      metadata:
+        labels:
+          app: unleash
+      spec:
+        containers:
+        - image: ${IMAGE}:${IMAGE_TAG}
+          imagePullPolicy: Always
+          name: unleash
+          env:
+            - name: DATABASE_URL
+              value: {{DATABASE_URL}}
+          ports:
+          - name: unleash
+            containerPort: 4242
+          resources:
+            requests:
+              memory: ${MEMORY_REQUESTS}
+              cpu: ${CPU_REQUESTS}
+            limits:
+              memory: ${MEMORY_LIMIT}
+              cpu: ${CPU_LIMIT}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: unleash
+    labels:
+      app: unleash
+  spec:
+    ports:
+      - protocol: TCP
+        port: 80
+        targetPort: 4242
+        name: unleash
+    selector:
+      app: unleash
+
+parameters:
+- name: IMAGE
+  value: quay.io/app-sre/unleash
+  displayName: unleash image
+  description: unleash docker image. Defaults to quay.io/app-sre/unleash
+- name: IMAGE_TAG
+  value: latest
+  displayName: unleash version
+  description: unleash version which defaults to latest
+- name: MEMORY_REQUESTS
+  value: 100Mi
+- name: MEMORY_LIMIT
+  value: 200Mi
+- name: CPU_REQUESTS
+  value: 50m
+- name: CPU_LIMIT
+  value: 100m
