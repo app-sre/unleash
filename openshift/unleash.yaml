@@ -32,6 +32,14 @@ objects:
           env:
             - name: DATABASE_URL
               value: {{DATABASE_URL}}
+            - name: GH_CLIENT_ID
+              value: {{GH_CLIENT_ID}}
+            - name: GH_CLIENT_SECRET
+              value: {{GH_CLIENT_SECRET}}
+            - name: GH_CALLBACK_URL
+              value: {{GH_CALLBACK_URL}}
+            - name: CLIENT_ACCESS_TOKEN
+              value: {{CLIENT_ACCESS_TOKEN}}
           ports:
           - name: unleash
             containerPort: 4242
