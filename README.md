@@ -22,6 +22,7 @@ Set the following environment variables:
 - `GH_CALLBACK_URL`: The OAuth callback URL.
 - `CLIENT_ACCESS_TOKEN`: The Client API Bearer Token that users have to
   authenticate with.
+- `ORGS`: The comma-separated list of Github authorized organizations.
 
 ### Run
 
@@ -44,5 +45,6 @@ $ docker run --rm -d -p 4242:4242 \
     -e GH_CALLBACK_URL=<GH_CALLBACK_URL> \
     -e CLIENT_ACCESS_TOKEN=<CLIENT_ACCESS_TOKEN> \
     -e DATABASE_URL=<DATABASE_URL> \
+    -e ORGS=<ORGS> \
     unleash
 ```
