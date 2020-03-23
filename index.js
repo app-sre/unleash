@@ -97,7 +97,7 @@ function adminAuth(app) {
           new unleash.AuthenticationRequired({
             path: '/api/admin/login',
             type: 'custom',
-            message: `You have to identify yourself in order to use Unleash.`,
+            message: 'Permission denied',
           }),
         )
         .end();
