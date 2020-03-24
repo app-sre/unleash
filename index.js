@@ -9,7 +9,9 @@ const DATABASE_URL = process.env.DATABASE_URL;
 const GH_CLIENT_ID = process.env.GH_CLIENT_ID;
 const GH_CLIENT_SECRET = process.env.GH_CLIENT_SECRET;
 const GH_CALLBACK_URL = process.env.GH_CALLBACK_URL;
+const ADMIN_ACCESS_TOKEN = process.env.ADMIN_ACCESS_TOKEN;
 const CLIENT_ACCESS_TOKEN = process.env.CLIENT_ACCESS_TOKEN;
+const TOKEN_SECRET = process.env.TOKEN_SECRET;
 const ORGS = process.env.ORGS;
 
 if(!DATABASE_URL) {
@@ -24,8 +26,14 @@ if(!GH_CLIENT_SECRET) {
 if(!GH_CALLBACK_URL) {
     throw new Error('GH_CALLBACK_URL not set!');
 }
+if(!ADMIN_ACCESS_TOKEN) {
+    throw new Error('ADMIN_ACCESS_TOKEN not set!');
+}
 if(!CLIENT_ACCESS_TOKEN) {
     throw new Error('CLIENT_ACCESS_TOKEN not set!');
+}
+if(!TOKEN_SECRET) {
+    throw new Error('TOKEN_SECRET not set!');
 }
 if(!ORGS) {
     throw new Error('ORGS not set!');
@@ -90,6 +98,8 @@ function adminAuth(app) {
   app.use('/api/admin/', (req, res, next) => {
     if (req.user) {
       next();
+    } else if (req.header('authorization') === `Bearer ${ADMIN_ACCESS_TOKEN}`) {
+      next();
     } else {
       return res
         .status('401')
@@ -115,6 +125,7 @@ function adminAuth(app) {
 
 const options = {
   enableLegacyRoutes: false,
+  secret: TOKEN_SECRET,
   adminAuthentication: 'custom',
   preRouterHook: adminAuth,
 };
