@@ -2,17 +2,17 @@
 
 Feature toggle as a service - Powered by [Unleash](https://github.com/Unleash/unleash)
 
-# Use
+## Server
 
-## Manually
+### Manually
 
-### Install
+#### Install
 
 ```
 $ yarn install --production
 ```
 
-### Configure
+#### Configure
 
 Set the following environment variables:
 
@@ -24,20 +24,20 @@ Set the following environment variables:
   authenticate with.
 - `ORGS`: The comma-separated list of Github authorized organizations.
 
-### Run
+#### Run
 
 ```
 $ node index.js
 ```
 
-## Docker
+### Docker
 
-### Build
+#### Build
 ```
 $ docker built -t unleash .
 ```
 
-### Run
+#### Run
 ```
 $ docker run --rm -d -p 4242:4242 \
     -e GH_CLIENT_ID=<GH_CLIENT_ID> \
@@ -47,4 +47,31 @@ $ docker run --rm -d -p 4242:4242 \
     -e DATABASE_URL=<DATABASE_URL> \
     -e ORGS=<ORGS> \
     unleash
+```
+
+## Python Client
+
+Install:
+
+```
+$ pip install UnleashClient
+```
+
+Example:
+```
+from UnleashClient import UnleashClient
+
+
+headers = {'Authorization': f'Bearer {CLIENT_ACCESS_TOKEN}'}
+
+client = UnleashClient(url="http://localhost:4242/api",
+                       app_name="My App",
+                       custom_headers=headers)
+
+client.initialize_client()
+
+if client.is_enabled("quay-mirror"):
+    print('quay-mirror toogle is enabled!')
+
+client.destroy()
 ```
