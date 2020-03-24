@@ -97,7 +97,7 @@ function adminAuth(app) {
           new unleash.AuthenticationRequired({
             path: '/api/admin/login',
             type: 'custom',
-            message: 'Permission denied',
+            message: `You have to be a member of one of these orgs: ${ORGS.replace(',', ', ')}`,
           }),
         )
         .end();
