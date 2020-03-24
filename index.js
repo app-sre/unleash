@@ -1,5 +1,6 @@
 'use strict';
 
+
 const unleash = require('unleash-server');
 const passport = require('passport');
 const GithubStrategy = require('./lib/strategy.js');
@@ -9,6 +10,7 @@ const GH_CLIENT_ID = process.env.GH_CLIENT_ID;
 const GH_CLIENT_SECRET = process.env.GH_CLIENT_SECRET;
 const GH_CALLBACK_URL = process.env.GH_CALLBACK_URL;
 const CLIENT_ACCESS_TOKEN = process.env.CLIENT_ACCESS_TOKEN;
+const ORGS = process.env.ORGS;
 
 if(!DATABASE_URL) {
     throw new Error('DATABASE_URL not set!');
@@ -25,6 +27,9 @@ if(!GH_CALLBACK_URL) {
 if(!CLIENT_ACCESS_TOKEN) {
     throw new Error('CLIENT_ACCESS_TOKEN not set!');
 }
+if(!ORGS) {
+    throw new Error('ORGS not set!');
+}
 
 passport.use(
   new GithubStrategy(
@@ -34,13 +39,32 @@ passport.use(
       callbackURL: GH_CALLBACK_URL,
     },
     (accessToken, refreshToken, profile, cb) => {
-      cb(
-        null,
-        new unleash.User({
-          name: profile.displayName,
-          email: profile.emails[0].value,
-        }),
-      );
+
+      var inOrg = false;
+      var orgs = ORGS.split(',')
+
+      for (var index in orgs) {
+
+        if (profile.orgs.includes(orgs[index])) {
+          inOrg = true;
+          break;
+          }
+        }
+
+      if (!inOrg) {
+        cb(
+          null,
+          false,
+          );
+      } else {
+        cb(
+          null,
+          new unleash.User({
+            name: profile.displayName,
+            email: profile.emails[0].value,
+            }),
+          );
+        }
     },
   ),
 );
@@ -73,7 +97,7 @@ function adminAuth(app) {
           new unleash.AuthenticationRequired({
             path: '/api/admin/login',
             type: 'custom',
-            message: `You have to identify yourself in order to use Unleash.`,
+            message: 'Permission denied',
           }),
         )
         .end();
