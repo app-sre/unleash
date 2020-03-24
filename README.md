@@ -48,3 +48,30 @@ $ docker run --rm -d -p 4242:4242 \
     -e ORGS=<ORGS> \
     unleash
 ```
+
+## Python Client
+
+Install:
+
+```
+$ pip install UnleashClient
+```
+
+Example:
+```
+from UnleashClient import UnleashClient
+
+
+headers = {'Authorization': f'Bearer {CLIENT_ACCESS_TOKEN}'}
+
+client = UnleashClient(url="http://localhost:4242/api",
+                       app_name="My App",
+                       custom_headers=headers)
+
+client.initialize_client()
+
+if client.is_enabled("quay-mirror"):
+    print('quay-mirror toogle is enabled!')
+
+client.destroy()
+```
