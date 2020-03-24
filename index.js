@@ -10,6 +10,7 @@ const GH_CLIENT_ID = process.env.GH_CLIENT_ID;
 const GH_CLIENT_SECRET = process.env.GH_CLIENT_SECRET;
 const GH_CALLBACK_URL = process.env.GH_CALLBACK_URL;
 const CLIENT_ACCESS_TOKEN = process.env.CLIENT_ACCESS_TOKEN;
+const TOKEN_SECRET = process.env.TOKEN_SECRET;
 const ORGS = process.env.ORGS;
 
 if(!DATABASE_URL) {
@@ -26,6 +27,9 @@ if(!GH_CALLBACK_URL) {
 }
 if(!CLIENT_ACCESS_TOKEN) {
     throw new Error('CLIENT_ACCESS_TOKEN not set!');
+}
+if(!TOKEN_SECRET) {
+    throw new Error('TOKEN_SECRET not set!');
 }
 if(!ORGS) {
     throw new Error('ORGS not set!');
@@ -115,6 +119,7 @@ function adminAuth(app) {
 
 const options = {
   enableLegacyRoutes: false,
+  secret: TOKEN_SECRET,
   adminAuthentication: 'custom',
   preRouterHook: adminAuth,
 };
