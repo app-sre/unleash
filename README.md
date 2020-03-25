@@ -16,7 +16,7 @@ to be provided:
   authenticate with.
 - `CLIENT_ACCESS_TOKEN`: The Client API Bearer token that clients have to
   authenticate with.
-- `TOKEN_SECRET`: Token used to encrypt the user session cookie.
+- `SESSION_SECRET`: Token used to encrypt the user session cookie.
 - `ORGS`: The comma-separated list of Github authorized organizations.
 
 ### Running Locally
