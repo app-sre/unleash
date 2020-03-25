@@ -30,16 +30,66 @@ objects:
           imagePullPolicy: Always
           name: unleash
           env:
-            - name: DATABASE_URL
-              value: {{DATABASE_URL}}
+            - name: DATABASE_HOST
+              valueFrom:
+                 secretKeyRef:
+                   name: unleash-rds
+                   key: db.host
+            - name: DATABASE_PORT
+              valueFrom:
+                 secretKeyRef:
+                   name: unleash-rds
+                   key: db.port
+            - name: DATABASE_USERNAME
+              valueFrom:
+                 secretKeyRef:
+                   name: unleash-rds
+                   key: db.user
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                 secretKeyRef:
+                   name: unleash-rds
+                   key: db.password
+            - name: DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: unleash-rds
+                  key: db.name
             - name: GH_CLIENT_ID
-              value: {{GH_CLIENT_ID}}
+              valueFrom:
+                secretKeyRef:
+                  name: oauth2
+                  key: GH_CLIENT_ID
             - name: GH_CLIENT_SECRET
-              value: {{GH_CLIENT_SECRET}}
+              valueFrom:
+                secretKeyRef:
+                  name: oauth2
+                  key: GH_CLIENT_SECRET
             - name: GH_CALLBACK_URL
-              value: {{GH_CALLBACK_URL}}
+              valueFrom:
+                secretKeyRef:
+                  name: oauth2
+                  key: GH_CALLBACK_URL
+            - name: ORGS
+              valueFrom:
+                secretKeyRef:
+                  name: oauth2
+                  key: ORGS
+            - name: ADMIN_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: tokens
+                  key: ADMIN_ACCESS_TOKEN
             - name: CLIENT_ACCESS_TOKEN
-              value: {{CLIENT_ACCESS_TOKEN}}
+              valueFrom:
+                secretKeyRef:
+                  name: tokens
+                  key: CLIENT_ACCESS_TOKEN
+            - name: SESSION_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: tokens
+                  key: SESSION_SECRET
           ports:
           - name: unleash
             containerPort: 4242
