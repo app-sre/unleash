@@ -1,65 +1,99 @@
 'use strict';
 
-
-const unleash = require('unleash-server');
+const githubStrategy = require('./lib/strategy.js');
+const knex = require('knex');
 const passport = require('passport');
-const GithubStrategy = require('./lib/strategy.js');
+const unleash = require('unleash-server');
 
+const ORG = process.env.ORG;
+const TEAM = process.env.TEAM;
+const DEFAULT_DB = process.env.DEFAULT_DB;
+const DATABASE_HOST = process.env.DATABASE_HOST;
+const DATABASE_USERNAME = process.env.DATABASE_USERNAME;
+const DATABASE_PASSWORD = process.env.DATABASE_PASSWORD;
+const DATABASE_NAME = process.env.DATABASE_NAME;
 const GH_CLIENT_ID = process.env.GH_CLIENT_ID;
 const GH_CLIENT_SECRET = process.env.GH_CLIENT_SECRET;
 const GH_CALLBACK_URL = process.env.GH_CALLBACK_URL;
 const ADMIN_ACCESS_TOKEN = process.env.ADMIN_ACCESS_TOKEN;
 const CLIENT_ACCESS_TOKEN = process.env.CLIENT_ACCESS_TOKEN;
 const SESSION_SECRET = process.env.SESSION_SECRET;
-const ORGS = process.env.ORGS;
 
+if(!ORG) {
+  throw new Error('ORG not set!');
+}
+if(!TEAM) {
+  throw new Error('TEAM not set!');
+}
+if(!DEFAULT_DB) {
+  throw new Error('DEFAULT_DB not set!');
+}
+if(!DATABASE_HOST) {
+  throw new Error('DATABASE_HOST not set!');
+}
+if(!DATABASE_USERNAME) {
+  throw new Error('DATABASE_USERNAME not set!');
+}
+if(!DATABASE_PASSWORD) {
+  throw new Error('DATABASE_PASSWORD not set!');
+}
+if(!DATABASE_NAME) {
+  throw new Error('DATABASE_NAME not set!');
+}
 if(!GH_CLIENT_ID) {
-    throw new Error('GH_CLIENT_ID not set!');
+  throw new Error('GH_CLIENT_ID not set!');
 }
 if(!GH_CLIENT_SECRET) {
-    throw new Error('GH_CLIENT_SECRET not set!');
+  throw new Error('GH_CLIENT_SECRET not set!');
 }
 if(!GH_CALLBACK_URL) {
-    throw new Error('GH_CALLBACK_URL not set!');
+  throw new Error('GH_CALLBACK_URL not set!');
 }
 if(!ADMIN_ACCESS_TOKEN) {
-    throw new Error('ADMIN_ACCESS_TOKEN not set!');
+  throw new Error('ADMIN_ACCESS_TOKEN not set!');
 }
 if(!CLIENT_ACCESS_TOKEN) {
-    throw new Error('CLIENT_ACCESS_TOKEN not set!');
+  throw new Error('CLIENT_ACCESS_TOKEN not set!');
 }
 if(!SESSION_SECRET) {
-    throw new Error('SESSION_SECRET not set!');
-}
-if(!ORGS) {
-    throw new Error('ORGS not set!');
+  throw new Error('SESSION_SECRET not set!');
 }
 
+// Checking if the database exists, creating when it does not.
+var db = knex({
+ client: 'pg',
+ connection: {
+   host: DATABASE_HOST,
+   user: DATABASE_USERNAME,
+   password: DATABASE_PASSWORD,
+   database: DEFAULT_DB,
+   charset: 'utf8'
+ }
+})
+db.raw(`select count(*) from pg_catalog.pg_database where datname = '${DATABASE_NAME}';`)
+  .then((result) => {
+    if (result['rows'][0]['count'] === '0') {
+      db.raw(`CREATE DATABASE ${DATABASE_NAME};`).then(() => {
+        console.log(`creating database '${DATABASE_NAME}'`);
+      });
+    } else {
+      console.log(`database '${DATABASE_NAME}' exists`);
+    }
+  })
+  .finally(() => {
+    db.destroy();
+  });
+
 passport.use(
-  new GithubStrategy(
+  new githubStrategy(
     {
       clientID: GH_CLIENT_ID,
       clientSecret: GH_CLIENT_SECRET,
       callbackURL: GH_CALLBACK_URL,
     },
     (accessToken, refreshToken, profile, cb) => {
-
-      var inOrg = false;
-      var orgs = ORGS.split(',')
-
-      for (var index in orgs) {
-
-        if (profile.orgs.includes(orgs[index])) {
-          inOrg = true;
-          break;
-          }
-        }
-
-      if (!inOrg) {
-        cb(
-          null,
-          false,
-          );
+      if (profile.orgs.includes(ORG)) {
+        cb(null, false);
       } else {
         cb(
           null,
@@ -103,7 +137,7 @@ function adminAuth(app) {
           new unleash.AuthenticationRequired({
             path: '/api/admin/login',
             type: 'custom',
-            message: `You have to be a member of one of these orgs: ${ORGS.replace(',', ', ')}`,
+            message: `You have to be a member of the org '${ORG}' team '${TEAM}'`,
           }),
         )
         .end();
