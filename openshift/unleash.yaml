@@ -2,14 +2,14 @@
 apiVersion: v1
 kind: Template
 metadata:
-  name: unleash
+  name: ${identifier}
 objects:
 - apiVersion: extensions/v1beta1
   kind: Deployment
   metadata:
     labels:
-      app: unleash
-    name: unleash
+      app: ${identifier}
+    name: ${identifier}
   spec:
     replicas: 1
     strategy:
@@ -19,16 +19,16 @@ objects:
         maxSurge: 1
     selector:
       matchLabels:
-        app: unleash
+        app: ${identifier}
     template:
       metadata:
         labels:
-          app: unleash
+          app: ${identifier}
       spec:
         containers:
         - image: ${IMAGE}:${IMAGE_TAG}
           imagePullPolicy: Always
-          name: unleash
+          name: ${identifier}
           env:
             - name: ORG
               value: ${org}
@@ -104,17 +104,17 @@ objects:
 - apiVersion: v1
   kind: Service
   metadata:
-    name: unleash
+    name: ${identifier}
     labels:
-      app: unleash
+      app: ${identifier}
   spec:
     ports:
       - protocol: TCP
         port: 80
         targetPort: 4242
-        name: unleash
+        name: ${identifier}
     selector:
-      app: unleash
+      app: ${identifier}
 
 parameters:
 - name: IMAGE
