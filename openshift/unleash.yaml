@@ -64,32 +64,32 @@ objects:
             - name: GH_CLIENT_ID
               valueFrom:
                 secretKeyRef:
-                  name: ${identifier}/oauth2
+                  name: ${identifier}
                   key: GH_CLIENT_ID
             - name: GH_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: ${identifier}/oauth2
+                  name: ${identifier}
                   key: GH_CLIENT_SECRET
             - name: GH_CALLBACK_URL
               valueFrom:
                 secretKeyRef:
-                  name: ${identifier}/oauth2
+                  name: ${identifier}
                   key: GH_CALLBACK_URL
             - name: ADMIN_ACCESS_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: ${identifier}/tokens
+                  name: ${identifier}
                   key: ADMIN_ACCESS_TOKEN
             - name: CLIENT_ACCESS_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: ${identifier}/tokens
+                  name: ${identifier}
                   key: CLIENT_ACCESS_TOKEN
             - name: SESSION_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: ${identifier}/tokens
+                  name: ${identifier}
                   key: SESSION_SECRET
           ports:
           - name: unleash
