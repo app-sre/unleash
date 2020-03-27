@@ -8,16 +8,37 @@ The Unleash Feature Toggle Service gets all its configurations from
 environment variables. Here's the description of the variables that have
 to be provided:
 
-- `DATABASE_URL`: The full PostgreSQL URL.
+User validation:
+
+- `ORG`: The Github organization users have to be member of.
+- `TEAM`: The Github organization team users have to be member of.
+
+Database:
+
+- `DEFAULT_DB`: The default database name. It can be diferent from the actual
+  database and is used for the initial check/creation of the actual database.
+- `DATABASE_NAME`: The actual database to use in this instance. It will be
+  created if it does not exist.
+- `DATABASE_HOST`: The database hostname or ip address.
+- `DATABASE_USERNAME`: The database username.
+- `DATABASE_PASSWORD`: The database password.
+
+OAuth2:
+
 - `GH_CLIENT_ID`: The Github OAuth App Client ID.
 - `GH_CLIENT_SECRET`: The Github OAuth App Client Secret.
 - `GH_CALLBACK_URL`: The OAuth callback URL.
+
+API Access:
+
 - `ADMIN_ACCESS_TOKEN`: The Admin API Bearer token that admins have to
   authenticate with.
 - `CLIENT_ACCESS_TOKEN`: The Client API Bearer token that clients have to
   authenticate with.
+
+Security:
+
 - `SESSION_SECRET`: Token used to encrypt the user session cookie.
-- `ORGS`: The comma-separated list of Github authorized organizations.
 
 ### Running Locally
 

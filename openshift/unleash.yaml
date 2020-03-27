@@ -30,6 +30,12 @@ objects:
           imagePullPolicy: Always
           name: unleash
           env:
+            - name: ORG
+              value: {{ org }}
+            - name: TEAM
+              value: {{ team }}
+            - name: DATABASE_NAME
+              value: {{ identifier }}
             - name: DATABASE_HOST
               valueFrom:
                  secretKeyRef:
@@ -50,7 +56,7 @@ objects:
                  secretKeyRef:
                    name: unleash-rds
                    key: db.password
-            - name: DATABASE_NAME
+            - name: DEFAULT_DB
               valueFrom:
                 secretKeyRef:
                   name: unleash-rds
@@ -58,37 +64,32 @@ objects:
             - name: GH_CLIENT_ID
               valueFrom:
                 secretKeyRef:
-                  name: oauth2
+                  name: {{ identifier }}/oauth2
                   key: GH_CLIENT_ID
             - name: GH_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: oauth2
+                  name: {{ identifier }}/oauth2
                   key: GH_CLIENT_SECRET
             - name: GH_CALLBACK_URL
               valueFrom:
                 secretKeyRef:
-                  name: oauth2
+                  name: {{ identifier }}/oauth2
                   key: GH_CALLBACK_URL
-            - name: ORGS
-              valueFrom:
-                secretKeyRef:
-                  name: oauth2
-                  key: ORGS
             - name: ADMIN_ACCESS_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: tokens
+                  name: {{ identifier }}/tokens
                   key: ADMIN_ACCESS_TOKEN
             - name: CLIENT_ACCESS_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: tokens
+                  name: {{ identifier }}/tokens
                   key: CLIENT_ACCESS_TOKEN
             - name: SESSION_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: tokens
+                  name: {{ identifier }}/tokens
                   key: SESSION_SECRET
           ports:
           - name: unleash
