@@ -31,11 +31,11 @@ objects:
           name: unleash
           env:
             - name: ORG
-              value: {{ org }}
+              value: ${org}
             - name: TEAM
-              value: {{ team }}
+              value: ${team}
             - name: DATABASE_NAME
-              value: {{ identifier }}
+              value: ${identifier}
             - name: DATABASE_HOST
               valueFrom:
                  secretKeyRef:
@@ -64,32 +64,32 @@ objects:
             - name: GH_CLIENT_ID
               valueFrom:
                 secretKeyRef:
-                  name: {{ identifier }}/oauth2
+                  name: ${identifier}/oauth2
                   key: GH_CLIENT_ID
             - name: GH_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: {{ identifier }}/oauth2
+                  name: ${identifier}/oauth2
                   key: GH_CLIENT_SECRET
             - name: GH_CALLBACK_URL
               valueFrom:
                 secretKeyRef:
-                  name: {{ identifier }}/oauth2
+                  name: ${identifier}/oauth2
                   key: GH_CALLBACK_URL
             - name: ADMIN_ACCESS_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: {{ identifier }}/tokens
+                  name: ${identifier}/tokens
                   key: ADMIN_ACCESS_TOKEN
             - name: CLIENT_ACCESS_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: {{ identifier }}/tokens
+                  name: ${identifier}/tokens
                   key: CLIENT_ACCESS_TOKEN
             - name: SESSION_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: {{ identifier }}/tokens
+                  name: ${identifier}/tokens
                   key: SESSION_SECRET
           ports:
           - name: unleash
