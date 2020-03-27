@@ -133,3 +133,9 @@ parameters:
   value: 50m
 - name: CPU_LIMIT
   value: 100m
+- name: identifier
+  value: unleash
+- name: org
+  value: app-sre
+- name: team
+  value: app-sre-cluster
