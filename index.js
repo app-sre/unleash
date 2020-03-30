@@ -69,7 +69,8 @@ var db = knex({
    database: DEFAULT_DB,
    charset: 'utf8'
  }
-})
+});
+
 db.raw(`select count(*) from pg_catalog.pg_database where datname = '${DATABASE_NAME}';`)
   .then((result) => {
     if (result['rows'][0]['count'] === '0') {
@@ -92,7 +93,17 @@ passport.use(
       callbackURL: GH_CALLBACK_URL,
     },
     (accessToken, refreshToken, profile, cb) => {
-      if (profile.orgs.includes(ORG)) {
+
+      var validUser = false;
+
+      for (var index in profile.teams) {
+        if (profile.teams[index].name === TEAM && profile.teams[index].name === TEAM) {
+          validUser = true;
+          break;
+        }
+      }
+
+      if (!validUser) {
         cb(null, false);
       } else {
         cb(
@@ -137,7 +148,7 @@ function adminAuth(app) {
           new unleash.AuthenticationRequired({
             path: '/api/admin/login',
             type: 'custom',
-            message: `You have to be a member of the org '${ORG}' team '${TEAM}'`,
+            message: `You have to be a member to the org '${ORG}' team '${TEAM}'`,
           }),
         )
         .end();
