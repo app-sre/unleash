@@ -37,7 +37,7 @@ objects:
             - name: DATABASE_HOST
               valueFrom:
                  secretKeyRef:
-                   name: ${identifier}
+                   name: ${dbsecret}
                    key: db.host
             - name: DATABASE_PORT
               valueFrom:
