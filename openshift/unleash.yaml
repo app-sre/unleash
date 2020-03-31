@@ -37,57 +37,57 @@ objects:
             - name: DATABASE_HOST
               valueFrom:
                  secretKeyRef:
-                   name: ${dbsecret}
+                   name: ${databaseSecret}
                    key: db.host
             - name: DATABASE_PORT
               valueFrom:
                  secretKeyRef:
-                   name: ${dbsecret}
+                   name: ${databaseSecret}
                    key: db.port
             - name: DATABASE_USERNAME
               valueFrom:
                  secretKeyRef:
-                   name: ${dbsecret}
+                   name: ${databaseSecret}
                    key: db.user
             - name: DATABASE_PASSWORD
               valueFrom:
                  secretKeyRef:
-                   name: ${dbsecret}
+                   name: ${databaseSecret}
                    key: db.password
             - name: DATABASE_NAME
               valueFrom:
                 secretKeyRef:
-                  name: ${dbsecret}
+                  name: ${databaseSecret}
                   key: db.name
             - name: GH_CLIENT_ID
               valueFrom:
                 secretKeyRef:
-                  name: ${identifier}
+                  name: ${configSecret}
                   key: GH_CLIENT_ID
             - name: GH_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: ${identifier}
+                  name: ${configSecret}
                   key: GH_CLIENT_SECRET
             - name: GH_CALLBACK_URL
               valueFrom:
                 secretKeyRef:
-                  name: ${identifier}
+                  name: ${configSecret}
                   key: GH_CALLBACK_URL
             - name: ADMIN_ACCESS_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: ${identifier}
+                  name: ${configSecret}
                   key: ADMIN_ACCESS_TOKEN
             - name: CLIENT_ACCESS_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: ${identifier}
+                  name: ${configSecret}
                   key: CLIENT_ACCESS_TOKEN
             - name: SESSION_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: ${identifier}
+                  name: ${configSecret}
                   key: SESSION_SECRET
           ports:
           - name: unleash
@@ -132,9 +132,11 @@ parameters:
 - name: CPU_LIMIT
   value: 100m
 - name: identifier
-  value: unleash
-- name: dbsecret
-  value: unleash-rds
+  value: app-interface
+- name: configSecret
+  value: app-interface-production
+- name: databaseSecret
+  value: app-interface-unleash-rds
 - name: org
   value: app-sre
 - name: team
