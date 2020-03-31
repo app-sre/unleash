@@ -1,13 +1,11 @@
 'use strict';
 
 const githubStrategy = require('./lib/strategy.js');
-const knex = require('knex');
 const passport = require('passport');
 const unleash = require('unleash-server');
 
 const ORG = process.env.ORG;
 const TEAM = process.env.TEAM;
-const DEFAULT_DB = process.env.DEFAULT_DB;
 const DATABASE_HOST = process.env.DATABASE_HOST;
 const DATABASE_USERNAME = process.env.DATABASE_USERNAME;
 const DATABASE_PASSWORD = process.env.DATABASE_PASSWORD;
@@ -24,9 +22,6 @@ if(!ORG) {
 }
 if(!TEAM) {
   throw new Error('TEAM not set!');
-}
-if(!DEFAULT_DB) {
-  throw new Error('DEFAULT_DB not set!');
 }
 if(!DATABASE_HOST) {
   throw new Error('DATABASE_HOST not set!');
@@ -58,32 +53,6 @@ if(!CLIENT_ACCESS_TOKEN) {
 if(!SESSION_SECRET) {
   throw new Error('SESSION_SECRET not set!');
 }
-
-// Checking if the database exists, creating when it does not.
-var db = knex({
- client: 'pg',
- connection: {
-   host: DATABASE_HOST,
-   user: DATABASE_USERNAME,
-   password: DATABASE_PASSWORD,
-   database: DEFAULT_DB,
-   charset: 'utf8'
- }
-});
-
-db.raw(`select count(*) from pg_catalog.pg_database where datname = '${DATABASE_NAME}';`)
-  .then((result) => {
-    if (result['rows'][0]['count'] === '0') {
-      db.raw(`CREATE DATABASE ${DATABASE_NAME};`).then(() => {
-        console.log(`creating database '${DATABASE_NAME}'`);
-      });
-    } else {
-      console.log(`database '${DATABASE_NAME}' exists`);
-    }
-  })
-  .finally(() => {
-    db.destroy();
-  });
 
 passport.use(
   new githubStrategy(
