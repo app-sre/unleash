@@ -15,10 +15,7 @@ User validation:
 
 Database:
 
-- `DEFAULT_DB`: The default database name. It can be diferent from the actual
-  database and is used for the initial check/creation of the actual database.
-- `DATABASE_NAME`: The actual database to use in this instance. It will be
-  created if it does not exist.
+- `DATABASE_NAME`: The database to use backing this instance.
 - `DATABASE_HOST`: The database hostname or ip address.
 - `DATABASE_USERNAME`: The database username.
 - `DATABASE_PASSWORD`: The database password.
