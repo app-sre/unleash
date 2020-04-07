@@ -79,16 +79,16 @@ objects:
                 secretKeyRef:
                   name: ${configSecret}
                   key: ADMIN_ACCESS_TOKEN
-            - name: CLIENT_ACCESS_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: ${configSecret}
-                  key: CLIENT_ACCESS_TOKEN
             - name: SESSION_SECRET
               valueFrom:
                 secretKeyRef:
                   name: ${configSecret}
                   key: SESSION_SECRET
+            - name: CLIENT_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: ${tokenSecret}
+                  key: CLIENT_ACCESS_TOKEN
           ports:
           - name: unleash
             containerPort: 4242
@@ -134,9 +134,11 @@ parameters:
 - name: identifier
   value: app-interface
 - name: configSecret
-  value: app-interface-production
+  value: app-interface-config
 - name: databaseSecret
   value: app-interface-unleash-rds
+- name: tokenSecret
+  value: app-interface-token
 - name: org
   value: app-sre
 - name: team
