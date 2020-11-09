@@ -56,7 +56,7 @@ $ node index.js
 #### Build
 
 ```
-$ docker built -t unleash .
+$ docker build -t unleash .
 ```
 
 #### Run
