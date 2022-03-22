@@ -12,7 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "unleash-server": "^3.2.30",
+    "unleash-server": "^4.8.2",
     "basic-auth": "^2.0.1",
     "passport": ">= 0.0.0",
     "passport-oauth2": "1.x.x"
