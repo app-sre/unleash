@@ -55,7 +55,8 @@ if(!SESSION_SECRET) {
 }
 
 
-function adminAuth(app, services) {
+function adminAuth(app, config, services) {
+  const { baseUriPath } = config.server;
   const { userService } = services;
   
   passport.use(
@@ -138,7 +139,12 @@ const options = {
   authentication: {
     type: 'custom',
     customAuthHandler: adminAuth
-  }
+  },
+  server: {
+      enableRequestLogger: true,
+      baseUriPath: '',
+  },
+  logLevel: 'info',
 };
 
 unleash.start(options).then(instance => {
