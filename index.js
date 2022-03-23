@@ -136,8 +136,10 @@ function adminAuth(app) {
 const options = {
   enableLegacyRoutes: false,
   secret: SESSION_SECRET,
-  adminAuthentication: 'custom',
-  preRouterHook: adminAuth,
+  authentication: {
+    type: 'custom',
+    customAuthHandler: adminAuth
+  }
 };
 
 unleash.start(options).then(instance => {
