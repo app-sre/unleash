@@ -78,6 +78,7 @@ passport.use(
         cb(
           null,
           new unleash.User({
+            id: profile.id,
             name: profile.displayName,
             email: profile.emails[0].value,
             }),
