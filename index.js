@@ -54,41 +54,39 @@ if(!SESSION_SECRET) {
   throw new Error('SESSION_SECRET not set!');
 }
 
-passport.use(
-  new githubStrategy(
-    {
-      clientID: GH_CLIENT_ID,
-      clientSecret: GH_CLIENT_SECRET,
-      callbackURL: GH_CALLBACK_URL,
-    },
-    (accessToken, refreshToken, profile, cb) => {
 
-      var validUser = false;
-
-      for (var index in profile.teams) {
-        if (profile.teams[index].name === TEAM && profile.teams[index].name === TEAM) {
-          validUser = true;
-          break;
+function adminAuth(app, services) {
+  const { userService } = services;
+  
+  passport.use(
+    new githubStrategy(
+      {
+        clientID: GH_CLIENT_ID,
+        clientSecret: GH_CLIENT_SECRET,
+        callbackURL: GH_CALLBACK_URL,
+      },
+      async (accessToken, refreshToken, profile, cb) => {
+  
+        var validUser = false;
+  
+        for (var index in profile.teams) {
+          if (profile.teams[index].name === TEAM && profile.teams[index].name === TEAM) {
+            validUser = true;
+            break;
+          }
         }
-      }
+  
+        if (!validUser) {
+          cb(null, false);
+        } else {
+          const email  = profile.emails[0].value;
+          const user = await userService.loginUserWithoutPassword(email, true);
+          cb(null, user);
+          }
+      },
+    ),
+  );
 
-      if (!validUser) {
-        cb(null, false);
-      } else {
-        cb(
-          null,
-          new unleash.User({
-            id: profile.id,
-            name: profile.displayName,
-            email: profile.emails[0].value,
-            }),
-          );
-        }
-    },
-  ),
-);
-
-function adminAuth(app) {
   app.use(passport.initialize());
   app.use(passport.session());
   passport.serializeUser((user, done) => done(null, user));
@@ -137,7 +135,6 @@ function adminAuth(app) {
 const options = {
   enableLegacyRoutes: false,
   secret: SESSION_SECRET,
-  preRouterHook: adminAuth,
   authentication: {
     type: 'custom',
     customAuthHandler: adminAuth
