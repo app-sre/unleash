@@ -136,6 +136,7 @@ function adminAuth(app) {
 const options = {
   enableLegacyRoutes: false,
   secret: SESSION_SECRET,
+  preRouterHook: adminAuth,
   authentication: {
     type: 'custom',
     customAuthHandler: adminAuth
