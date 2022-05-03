@@ -4,6 +4,10 @@ kind: Template
 metadata:
   name: ${identifier}
 objects:
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    name: unleash
 - apiVersion: apps/v1
   kind: Deployment
   metadata:
