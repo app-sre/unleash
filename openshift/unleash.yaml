@@ -25,6 +25,18 @@ objects:
         labels:
           app: ${identifier}
       spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - unleash
+              topologyKey: "kubernetes.io/hostname"
+            weight: 100
         containers:
         - image: ${IMAGE}:${IMAGE_TAG}
           imagePullPolicy: Always
