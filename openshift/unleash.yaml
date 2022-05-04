@@ -101,18 +101,20 @@ objects:
               cpu: ${CPU_LIMIT}
           readinessProbe:
             failureThreshold: 3
+            initialDelaySeconds: 5
             periodSeconds: 10
             successThreshold: 1
-            httpGet:
-              path: /healthz
-              port: http
-              scheme: HTTPS
+            tcpSocket:
+              port: 4242
             timeoutSeconds: 1
           livenessProbe:
-            httpGet:
-              path: /
-              port: 4242
+            failureThreshold: 3
             initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 4242
+            timeoutSeconds: 1
 - apiVersion: v1
   kind: Service
   metadata:
