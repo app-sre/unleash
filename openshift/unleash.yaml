@@ -41,6 +41,7 @@ objects:
                   - unleash
               topologyKey: "kubernetes.io/hostname"
             weight: 100
+        serviceAccountName: unleash
         containers:
         - image: ${IMAGE}:${IMAGE_TAG}
           imagePullPolicy: Always
