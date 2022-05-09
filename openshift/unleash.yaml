@@ -32,15 +32,18 @@ objects:
         affinity:
           podAntiAffinity:
             preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 100
-              podAffinityTerm:
+            - podAffinityTerm:
                 labelSelector:
                   matchExpressions:
                   - key: app
                     operator: In
                     values:
-                    - unleash
+                    - app-interface
+                    - insights
+                    - ocm
+                    - managed-services
                 topologyKey: "kubernetes.io/hostname"
+              weight: 100
         serviceAccountName: unleash
         containers:
         - image: ${IMAGE}:${IMAGE_TAG}
