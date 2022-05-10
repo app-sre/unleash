@@ -38,10 +38,7 @@ objects:
                   - key: app
                     operator: In
                     values:
-                    - app-interface
-                    - insights
-                    - ocm
-                    - managed-services
+                    - ${identifier}
                 topologyKey: "kubernetes.io/hostname"
               weight: 100
         serviceAccountName: unleash
