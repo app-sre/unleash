@@ -38,7 +38,7 @@ objects:
                   - key: app
                     operator: In
                     values:
-                    - unleash
+                    - ${identifier}
                 topologyKey: "kubernetes.io/hostname"
               weight: 100
         serviceAccountName: unleash
