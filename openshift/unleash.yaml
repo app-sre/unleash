@@ -7,7 +7,7 @@ objects:
 - apiVersion: v1
   kind: ServiceAccount
   metadata:
-    name: unleash
+    name: ${identifier}
 - apiVersion: apps/v1
   kind: Deployment
   metadata:
@@ -41,7 +41,7 @@ objects:
                     - ${identifier}
                 topologyKey: "kubernetes.io/hostname"
               weight: 100
-        serviceAccountName: unleash
+        serviceAccountName: ${identifier}
         containers:
         - image: ${IMAGE}:${IMAGE_TAG}
           imagePullPolicy: Always
