@@ -178,3 +178,4 @@ parameters:
   value: app-sre
 - name: team
   value: app-sre-cluster
+- name: read-only-team

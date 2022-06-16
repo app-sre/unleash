@@ -11,7 +11,8 @@ to be provided:
 User validation:
 
 - `ORG`: The Github organization users have to be member of.
-- `TEAM`: The Github organization team users have to be member of.
+- `TEAM`: The Github organization team users have to be member of to be admin in Unleash
+- `READ_ONLY_TEAM`: The Github organization team users have to be member of to have read only access to Unleash
 
 Database:
 
