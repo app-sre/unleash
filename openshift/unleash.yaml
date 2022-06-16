@@ -51,6 +51,8 @@ objects:
               value: ${org}
             - name: TEAM
               value: ${team}
+            - name: READ_ONLY_TEAM
+              value: ${read_only_team}
             - name: DATABASE_HOST
               valueFrom:
                  secretKeyRef:
@@ -178,4 +180,4 @@ parameters:
   value: app-sre
 - name: team
   value: app-sre-cluster
-- name: read-only-team
+- name: read_only_team
