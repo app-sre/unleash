@@ -6,6 +6,7 @@ const unleash = require('unleash-server');
 
 const ORG = process.env.ORG;
 const TEAM = process.env.TEAM;
+const READ_ONLY_TEAM = process.env.READ_ONLY_TEAM;
 const DATABASE_HOST = process.env.DATABASE_HOST;
 const DATABASE_USERNAME = process.env.DATABASE_USERNAME;
 const DATABASE_PASSWORD = process.env.DATABASE_PASSWORD;
@@ -57,7 +58,7 @@ if(!SESSION_SECRET) {
 
 function adminAuth(app, config, services) {
   const { baseUriPath } = config.server;
-  const { userService } = services;
+  const { userService, accessService } = services;
   
   passport.use(
     new githubStrategy(
@@ -68,20 +69,24 @@ function adminAuth(app, config, services) {
       },
       async (accessToken, refreshToken, profile, cb) => {
   
-        var validUser = false;
+        var role;
   
         for (var index in profile.teams) {
-          if (profile.teams[index].name === TEAM && profile.teams[index].name === TEAM) {
-            validUser = true;
+          if (READ_ONLY_TEAM && profile.teams[index].name === READ_ONLY_TEAM) {
+            role = "Viewer";
+          }
+          if (profile.teams[index].name === TEAM) {
+            role = "Editor";
             break;
           }
         }
   
-        if (!validUser) {
+        if (!role) {
           cb(null, false);
         } else {
           const email  = profile.emails[0].value;
           const user = await userService.loginUserWithoutPassword(email, true);
+          await accessService.setUserRootRole(user.id, role);
           cb(null, user);
           }
       },
