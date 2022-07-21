@@ -108,6 +108,8 @@ objects:
                 secretKeyRef:
                   name: ${tokenSecret}
                   key: CLIENT_ACCESS_TOKEN
+            - name: UNLEASH_URL
+              value: https://${host}
           ports:
           - name: unleash
             containerPort: 4242
@@ -148,6 +150,24 @@ objects:
         name: ${identifier}
     selector:
       app: ${identifier}
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    annotations:
+      cert-manager.io/issuer-kind: ClusterIssuer
+      cert-manager.io/issuer-name: letsencrypt-prod-http
+    labels:
+      service: ${identifier}
+    name: ${identifier}
+  spec:
+    host: ${host}
+    to:
+      kind: Service
+      name: ${identifier}
+      weight: 100
+    tls:
+      insecureEdgeTerminationPolicy: Redirect
+      termination: edge
 
 parameters:
 - name: IMAGE
@@ -181,3 +201,4 @@ parameters:
 - name: team
   value: app-sre-cluster
 - name: read_only_team
+- name: host
