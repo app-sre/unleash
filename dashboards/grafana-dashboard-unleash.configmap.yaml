@@ -217,8 +217,7 @@ data:
     }
 kind: ConfigMap
 metadata:
-  creationTimestamp: null
-  name: grafana-dashboard-unleash
+  name: grafana-dashboard-unleash-performance-overview
   labels:
     grafana_dashboard: "true"
   annotations:
