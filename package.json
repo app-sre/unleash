@@ -14,7 +14,7 @@
   "dependencies": {
     "unleash-server": "=4.21.0",
     "basic-auth": "^2.0.1",
-    "passport": ">= 0.0.0",
-    "passport-oauth2": "1.x.x"
+    "passport": "^0.6.0",
+    "passport-oauth2": "^1.7.0"
   }
 }
