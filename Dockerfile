@@ -1,14 +1,28 @@
-FROM        registry.access.redhat.com/ubi8/nodejs-16
+FROM registry.access.redhat.com/ubi8/nodejs-16
 
-RUN         npm install -g yarn
+USER 0
 
-COPY        package.json yarn.lock ./
+RUN set -eux && \
+  npm set progress=false && \
+  npm set update-notifier=false && \
+  npm set audit=false && \
+  npm install -g yarn && \
+  npm cache clean --force
 
-RUN         yarn install --frozen-lockfile --production
+USER 1001
 
-COPY        . ./
+COPY --chown=1001:root package.json yarn.lock ./
 
-EXPOSE      4242
+RUN set -eux && \
+  yarn install --frozen-lockfile --ignore-scripts --production && \
+  yarn cache clean
 
-ENTRYPOINT  ["node"]
-CMD         ["index.js"]
+COPY --chown=1001:root . ./
+
+ENV NODE_ENV production
+
+EXPOSE 4242
+
+ENTRYPOINT ["node"]
+
+CMD ["index.js"]
