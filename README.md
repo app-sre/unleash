@@ -43,7 +43,7 @@ Security:
 #### Install
 
 ```
-$ yarn install --production
+$ npm install --production
 ```
 
 #### Run
