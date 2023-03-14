@@ -15,7 +15,7 @@ COPY --chown=1001:root package.json package-lock.json ./
 ENV NODE_ENV production
 
 RUN set -eux && \
-  npm install-clean && \
+  npm ci && \
   npm cache clean --force
 
 COPY --chown=1001:root . ./
