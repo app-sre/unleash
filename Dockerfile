@@ -6,20 +6,20 @@ RUN set -eux && \
   npm set progress=false && \
   npm set update-notifier=false && \
   npm set audit=false && \
-  npm install -g yarn && \
-  npm cache clean --force
+  npm set fund=false && \
+  npm install -g npm@latest
 
 USER 1001
 
-COPY --chown=1001:root package.json yarn.lock ./
-
-RUN set -eux && \
-  yarn install --frozen-lockfile --ignore-scripts --production && \
-  yarn cache clean
-
-COPY --chown=1001:root . ./
+COPY --chown=1001:root package.json package-lock.json ./
 
 ENV NODE_ENV production
+
+RUN set -eux && \
+  npm install-clean && \
+  npm cache clean --force
+
+COPY --chown=1001:root . ./
 
 EXPOSE 4242
 
