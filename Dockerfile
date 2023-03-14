@@ -6,8 +6,7 @@ RUN set -eux && \
   npm set progress=false && \
   npm set update-notifier=false && \
   npm set audit=false && \
-  npm set fund=false && \
-  npm install -g npm@latest
+  npm set fund=false
 
 USER 1001
 
