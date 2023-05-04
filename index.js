@@ -113,7 +113,7 @@ function adminAuth(app, config, services) {
   app.use('/api/admin/', (req, res, next) => {
     if (req.user) {
       next();
-    } else if (req.header('authorization') === `Bearer ${ADMIN_ACCESS_TOKEN}`) {
+    } else if (req.header('authorization') === `Bearer ${ADMIN_ACCESS_TOKEN}`) || (req.header('authorization') === `${ADMIN_ACCESS_TOKEN}`) {
       next();
     } else {
       return res
@@ -130,7 +130,7 @@ function adminAuth(app, config, services) {
   });
 
   app.use('/api/client', (req, res, next) => {
-    if (req.header('authorization') === `Bearer ${CLIENT_ACCESS_TOKEN}`) {
+    if (req.header('authorization') === `Bearer ${CLIENT_ACCESS_TOKEN}`) || (req.header('authorization') === `${ADMIN_ACCESS_TOKEN}`) {
       next();
      } else {
        res.sendStatus(401);
