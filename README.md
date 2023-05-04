@@ -29,9 +29,9 @@ OAuth2:
 
 API Access:
 
-- `ADMIN_ACCESS_TOKEN`: The Admin API Bearer token that admins have to
+- `ADMIN_ACCESS_TOKEN`: The Admin API token that admins have to
   authenticate with.
-- `CLIENT_ACCESS_TOKEN`: The Client API Bearer token that clients have to
+- `CLIENT_ACCESS_TOKEN`: The Client API token that clients have to
   authenticate with.
 
 Security:
@@ -83,7 +83,7 @@ Example:
 from UnleashClient import UnleashClient
 
 
-headers = {'Authorization': f'Bearer {CLIENT_ACCESS_TOKEN}'}
+headers = {'Authorization': CLIENT_ACCESS_TOKEN}
 
 client = UnleashClient(url="http://localhost:4242/api",
                        app_name="My App",
@@ -111,7 +111,7 @@ Example:
 ```
 import requests
 
-headers = {'Authorization': f'Bearer {ADMIN_ACCESS_TOKEN}'}
+headers = {'Authorization': ADMIN_ACCESS_TOKEN}
 
 data = {"enabled": False,
         "strategies": [{"name": "default"}]}
