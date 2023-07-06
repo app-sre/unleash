@@ -12,9 +12,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "unleash-server": "=4.21.0",
     "basic-auth": "^2.0.1",
+    "jsonwebtoken": "^9.0.1",
     "passport": "^0.6.0",
-    "passport-oauth2": "^1.7.0"
+    "passport-oauth2": "^1.7.0",
+    "unleash-server": "=4.21.0"
   }
 }
