@@ -84,7 +84,7 @@ function enableKeycloakOauth (app, config, services) {
       },
 
       async (accessToken, refreshToken, profile, done) => {
-        console.log('profile', profile)
+        console.log(`username: ${profile.username} roles: ${profile.roles}`)
 
         const getRole = (userRoles) => {
           if (
