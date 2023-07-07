@@ -86,30 +86,39 @@ function enableKeycloakOauth(app, config, services) {
       async (accessToken, refreshToken, profile, done) => {
         console.log("profile", profile);
 
-        const user_roles = profile.roles || [];
-        const isAdmin = user_roles.some((item1) =>
-          KC_ADMIN_ROLES.some(
-            (item2) => item2.toLowerCase() === item1.toLowerCase()
-          )
-        );
-        const isEditor = user_roles.some((item1) =>
-          KC_EDITOR_ROLES.some(
-            (item2) => item2.toLowerCase() === item1.toLowerCase()
-          )
-        );
-        const isViewer = user_roles.some((item1) =>
-          KC_VIEWER_ROLES.some(
-            (item2) => item2.toLowerCase() === item1.toLowerCase()
-          )
-        );
+        const getRole = (user_roles) => {
+          if (
+            user_roles.some((item1) =>
+              KC_ADMIN_ROLES.some(
+                (item2) => item2.toLowerCase() === item1.toLowerCase()
+              )
+            )
+          ) {
+            return "Admin";
+          }
+          if (
+            user_roles.some((item1) =>
+              KC_EDITOR_ROLES.some(
+                (item2) => item2.toLowerCase() === item1.toLowerCase()
+              )
+            )
+          ) {
+            return "Editor";
+          }
+          if (
+            user_roles.some((item1) =>
+              KC_VIEWER_ROLES.some(
+                (item2) => item2.toLowerCase() === item1.toLowerCase()
+              )
+            )
+          ) {
+            return "Viewer";
+          }
+          return null;
+        };
 
-        if (isAdmin) {
-          var role = "Admin";
-        } else if (isEditor) {
-          var role = "Editor";
-        } else if (isViewer) {
-          var role = "Viewer";
-        } else {
+        const role = getRole(profile.roles || []);
+        if (!role) {
           // Not authorized
           console.log("Not authorized");
           done(null, false);
