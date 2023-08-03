@@ -1,14 +1,12 @@
-FROM registry.access.redhat.com/ubi8/nodejs-16
+FROM registry.access.redhat.com/ubi8/nodejs-18
 
-USER 0
+USER 1001
 
 RUN set -eux && \
   npm set progress=false && \
   npm set update-notifier=false && \
   npm set audit=false && \
   npm set fund=false
-
-USER 1001
 
 COPY --chown=1001:root package.json package-lock.json ./
 
