@@ -7,7 +7,7 @@
     "test:ci": "echo 'no tests for unleash-docker';"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   },
   "author": "",
   "license": "ISC",
@@ -16,7 +16,7 @@
     "jsonwebtoken": "^9.0.1",
     "passport": "^0.6.0",
     "passport-oauth2": "^1.7.0",
-    "unleash-server": "=4.21.0"
+    "unleash-server": "=5.3.3"
   },
   "devDependencies": {
     "eslint": "^8.44.0",
