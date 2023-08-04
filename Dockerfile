@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/nodejs-18
+FROM registry.access.redhat.com/ubi8/nodejs-18-minimal
 
 USER 1001
 
