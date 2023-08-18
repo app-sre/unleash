@@ -1,0 +1,150 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: "unleash-{{.package.metadata.name}}"
+  annotations:
+    package-operator.run/phase: deploy
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "unleash-{{.package.metadata.name}}"
+  annotations:
+    package-operator.run/phase: deploy
+  labels:
+    app: "unleash-{{.package.metadata.name}}"
+spec:
+  replicas: {{.config.unleash.replicas}}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: "unleash-{{.package.metadata.name}}"
+  template:
+    metadata:
+      labels:
+        app: "unleash-{{.package.metadata.name}}"
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - "unleash-{{.package.metadata.name}}"
+              topologyKey: "kubernetes.io/hostname"
+            weight: 100
+      serviceAccountName: "unleash-{{.package.metadata.name}}"
+      containers:
+      - image: "{{.config.unleash.image}}"
+        name: unleash
+        env:
+          # database settings
+          - name: DATABASE_HOST
+            value: "{{.config.db.host}}"
+          - name: DATABASE_PORT
+            value: "{{.config.db.port}}"
+          - name: DATABASE_USERNAME
+            value: "{{.config.db.user}}"
+          - name: DATABASE_PASSWORD
+            value: "{{.config.db.password}}"
+          - name: DATABASE_NAME
+            value: "{{.config.db.name}}"
+          - name: DATABASE_SSL
+            value: "{{.config.db.ssl}}"
+          # keycloak settings
+          - name: KC_HOST
+            value: "{{.config.unleash.authz.host}}"
+          - name: KC_REALM
+            value: "{{.config.unleash.authz.realm}}"
+          - name: KC_CLIENT_ID
+            value: "{{.config.unleash.authz.clientId}}"
+          - name: KC_CLIENT_SECRET
+            value: "{{.config.unleash.authz.clientSecret}}"
+          # roles
+          - name: KC_ADMIN_ROLES
+            value: "{{.config.unleash.authn.adminRoles}}"
+          - name: KC_EDITOR_ROLES
+            value: "{{.config.unleash.authn.editorRoles}}"
+          - name: KC_VIEWER_ROLES
+            value: "{{.config.unleash.authn.viewerRoles}}"
+          # custom tokens
+          - name: ADMIN_ACCESS_TOKEN
+            value: "{{.config.unleash.accessTokens.admin}}"
+          - name: CLIENT_ACCESS_TOKEN
+            value: "{{.config.unleash.accessTokens.client}}"
+          # misc settings
+          - name: UNLEASH_URL
+            value: "https://{{.config.unleash.host}}"
+          - name: SESSION_SECRET
+            value: "{{.config.unleash.sessionSecret}}"
+        ports:
+        - name: unleash
+          containerPort: 4242
+        resources:
+          requests:
+            memory: "{{.config.unleash.resources.requests.memory}}"
+            cpu: "{{.config.unleash.resources.requests.cpu}}"
+          limits:
+            memory: "{{.config.unleash.resources.limits.memory}}"
+            cpu: "{{.config.unleash.resources.limits.cpu}}"
+        readinessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 4242
+          timeoutSeconds: 1
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 4242
+          timeoutSeconds: 1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "unleash-{{.package.metadata.name}}"
+  annotations:
+    package-operator.run/phase: deploy
+  labels:
+    app: "unleash-{{.package.metadata.name}}"
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 4242
+      name: unleash
+  selector:
+    app: "unleash-{{.package.metadata.name}}"
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    cert-manager.io/issuer-kind: ClusterIssuer
+    cert-manager.io/issuer-name: letsencrypt-prod-http
+    package-operator.run/phase: deploy
+  labels:
+    service: "unleash-{{.package.metadata.name}}"
+  name: "unleash-{{.package.metadata.name}}"
+spec:
+  host: "{{.config.unleash.host}}"
+  to:
+    kind: Service
+    name: "unleash-{{.package.metadata.name}}"
+    weight: 100
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge

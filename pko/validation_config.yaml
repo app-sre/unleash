@@ -1,0 +1,17 @@
+unleash:
+  host: test.unleash.devshift.net
+  authz:
+    clientId: client-id
+    clientSecret: client-secret
+    host: https://auth.redhat.com
+    realm: redhat-external
+  sessionSecret: session-secret
+  accessTokens:
+    admin: admin-token
+    client: client-token
+db:
+  host: postgresql
+  port: 5432
+  user: postgres
+  password: postgres
+  name: test

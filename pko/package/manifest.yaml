@@ -1,0 +1,159 @@
+apiVersion: manifests.package-operator.run/v1alpha1
+kind: PackageManifest
+metadata:
+  name: unleash
+spec:
+  scopes:
+  - Namespaced
+  phases:
+  - name: deploy
+  availabilityProbes:
+  - probes:
+    - condition:
+        type: Available
+        status: "True"
+    - fieldsEqual:
+        fieldA: .status.updatedReplicas
+        fieldB: .status.replicas
+    selector:
+      kind:
+        group: apps
+        kind: Deployment
+  # how would we declare a probe for a Route?
+  # the `Admitted` condition is nested under `.status.ingress[*].conditions`
+
+  # how would we use a probe to find out that cert-manager did its job
+  # and updated `.spec.tls.certiciate|key` on a Route?
+  config:
+    openAPIV3Schema:
+      properties:
+        unleash:
+          type: object
+          properties:
+            image:
+              type: string
+              description: reference to the image containing unleash
+              default: quay.io/app-sre/unleash:latest
+            replicas:
+              description: number of replicas for the unleash deployment
+              type: integer
+              default: 3
+            resources:
+              type: object
+              default: {}
+              properties:
+                limits:
+                  type: object
+                  default: {}
+                  properties:
+                    cpu:
+                      type: string
+                      description: CPU limit for the unleash container
+                      default: 100m
+                    memory:
+                      type: string
+                      description: Memory limit for the unleash container
+                      default: 200Mi
+                requests:
+                  type: object
+                  default: {}
+                  properties:
+                    cpu:
+                      type: string
+                      description: CPU request for the unleash container
+                      default: 50m
+                    memory:
+                      type: string
+                      description: Memory request for the unleash container
+                      default: 100Mi
+            host:
+              type: string
+              description: Host for the route
+            authz:
+              type: object
+              properties:
+                clientId:
+                  type: string
+                  description: Client ID for OIDC auth
+                clientSecret:
+                  type: string
+                  description: Client secret for OIDC auth
+                host:
+                  type: string
+                  description: The base host for authorization, token and user info URLs
+                realm:
+                  type: string
+                  description: Realm for OIDC auth
+              required:
+              - clientId
+              - clientSecret
+              - host
+              - realm
+            authn:
+              type: object
+              default: {}
+              properties:
+                adminRoles:
+                  type: string
+                  default: ""
+                  description: CSV of admin roles
+                editorRoles:
+                  type: string
+                  default: ""
+                  description: CSV of editor roles
+                viewerRoles:
+                  type: string
+                  default: ""
+                  description: CSV of viewer roles
+            sessionSecret:
+              type: string
+              description: Secret used to sign session cookies
+            accessTokens:
+              type: object
+              properties:
+                admin:
+                  type: string
+                  description: Access token for admin user
+                client:
+                  type: string
+                  description: Access token for client user
+              required:
+              - admin
+              - client
+          required:
+          - host
+          - authz
+          - sessionSecret
+          - accessTokens
+        db:
+          type: object
+          properties:
+            host:
+              type: string
+              description: Host for the database
+            port:
+              type: integer
+              description: Port for the database
+            user:
+              type: string
+              description: Username for the database
+            password:
+              type: string
+              description: Password for the database
+            name:
+              type: string
+              description: Name of the database
+            ssl:
+              type: boolean
+              default: true
+              description: Whether to use SSL for the database connection
+          required:
+          - host
+          - port
+          - user
+          - password
+          - name
+      required:
+      - unleash
+      - db
+      type: object
