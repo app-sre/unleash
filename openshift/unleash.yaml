@@ -14,6 +14,9 @@ objects:
     labels:
       app: ${identifier}
     name: ${identifier}
+    metadata:
+      annotations:
+        ignore-check.kube-linter.io/unset-cpu-requirements: "no cpu limits"
   spec:
     replicas: ${{REPLICAS}}
     strategy:
@@ -129,7 +132,6 @@ objects:
               cpu: ${CPU_REQUESTS}
             limits:
               memory: ${MEMORY_LIMIT}
-              cpu: ${CPU_LIMIT}
           readinessProbe:
             failureThreshold: 3
             initialDelaySeconds: 5
@@ -196,8 +198,6 @@ parameters:
   value: 200Mi
 - name: CPU_REQUESTS
   value: 50m
-- name: CPU_LIMIT
-  value: 100m
 - name: identifier
   value: app-interface
 - name: configSecret
