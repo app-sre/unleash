@@ -48,8 +48,8 @@ spec:
           labels:
             app: "unleash-{{.package.metadata.name}}"
           annotations:
-            db-secret-sha: {{ " {{ toJson .config.db | sha256sum }}" }}
-            cfg-sha: {{ " {{ toJson .config.cfg | sha256sum }}" }}
+            db-secret-sha: {{ "{{ toJson .config.db | sha256sum }}" }}
+            cfg-sha: {{ "{{ toJson .config.cfg | sha256sum }}" }}
         spec:
           affinity:
             podAntiAffinity:
@@ -201,7 +201,7 @@ kind: Route
 metadata:
   annotations:
     cert-manager.io/issuer-kind: ClusterIssuer
-    cert-manager.io/issuer-name: letsencrypt-prod-http
+    cert-manager.io/issuer-name: {{.config.unleash.letsEncryptIssuer}}
     package-operator.run/phase: deploy
   labels:
     service: "unleash-{{.package.metadata.name}}"

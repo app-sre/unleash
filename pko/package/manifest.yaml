@@ -75,6 +75,10 @@ spec:
             host:
               type: string
               description: Host for the route
+            letsEncryptIssuer:
+              type: string
+              description: Name of the letscrypt ClusterIssuer to be used for the route
+              default: letsencrypt-prod-http
             secret:
               type: string
               description: Reference to the secret containing the auth config
