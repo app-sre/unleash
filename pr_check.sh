@@ -6,6 +6,6 @@ IMAGE_TEST=unleash-test
 docker build -t ${IMAGE_TEST} -f Dockerfile .
 
 # Validate package
-docker run -v .:/unleash:z quay.io/app-sre/package-operator-cli:a03f0f0 validate /unleash/pko/package
-docker run -v .:/unleash:z quay.io/app-sre/package-operator-cli:a03f0f0 tree /unleash/pko/package --config-path /unleash/pko/validation_config.yaml
+docker run -v .:/unleash:z quay.io/app-sre/package-operator-cli:92430cd validate /unleash/pko/package
+docker run -v .:/unleash:z quay.io/app-sre/package-operator-cli:92430cd tree /unleash/pko/package --config-path /unleash/pko/validation_config.yaml
 # todo - use test feature

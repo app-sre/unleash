@@ -19,11 +19,17 @@ spec:
       kind:
         group: apps
         kind: Deployment
-  # how would we declare a probe for a Route?
-  # the `Admitted` condition is nested under `.status.ingress[*].conditions`
-
-  # how would we use a probe to find out that cert-manager did its job
-  # and updated `.spec.tls.certiciate|key` on a Route?
+  - probes:
+    - cel:
+        message: Route has not been admitted
+        rule: self.status.ingress.all(i, i.conditions.all(c, c.type == "Admitted" && c.status == "True"))
+    - cel:
+        message: TLS cert or key not present on the Route
+        rule: "'certificate' in self.spec.tls && 'key' in self.spec.tls"
+    selector:
+      kind:
+        group: route.openshift.io
+        kind: Route
   config:
     openAPIV3Schema:
       properties:
@@ -69,90 +75,25 @@ spec:
             host:
               type: string
               description: Host for the route
-            authz:
-              type: object
-              properties:
-                clientId:
-                  type: string
-                  description: Client ID for OIDC auth
-                clientSecret:
-                  type: string
-                  description: Client secret for OIDC auth
-                host:
-                  type: string
-                  description: The base host for authorization, token and user info URLs
-                realm:
-                  type: string
-                  description: Realm for OIDC auth
-              required:
-              - clientId
-              - clientSecret
-              - host
-              - realm
-            authn:
-              type: object
-              default: {}
-              properties:
-                adminRoles:
-                  type: string
-                  default: ""
-                  description: CSV of admin roles
-                editorRoles:
-                  type: string
-                  default: ""
-                  description: CSV of editor roles
-                viewerRoles:
-                  type: string
-                  default: ""
-                  description: CSV of viewer roles
-            sessionSecret:
+            secret:
               type: string
-              description: Secret used to sign session cookies
-            accessTokens:
-              type: object
-              properties:
-                admin:
-                  type: string
-                  description: Access token for admin user
-                client:
-                  type: string
-                  description: Access token for client user
-              required:
-              - admin
-              - client
+              description: Reference to the secret containing the auth config
           required:
           - host
-          - authz
-          - sessionSecret
-          - accessTokens
+          - secret
         db:
           type: object
           properties:
-            host:
+            secret:
               type: string
-              description: Host for the database
-            port:
-              type: integer
-              description: Port for the database
-            user:
-              type: string
-              description: Username for the database
-            password:
-              type: string
-              description: Password for the database
-            name:
-              type: string
-              description: Name of the database
+              description: Reference to the DB secret
             ssl:
               type: boolean
               default: true
               description: Whether to use SSL for the database connection
           required:
-          - host
-          - port
-          - user
-          - password
-          - name
+          - secret
+          - ssl
       required:
       - unleash
       - db

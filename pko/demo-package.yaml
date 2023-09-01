@@ -3,23 +3,11 @@ kind: Package
 metadata:
   name: demo
 spec:
-  image: quay.io/app-sre/unleash-pko:a13bc3d
+  image: quay.io/app-sre/unleash-pko:latest
   config:
     unleash:
-      host: host
-      authz:
-        clientId: foo
-        clientSecret: bar
-        host: https://my-keykloak/auth
-        realm: realm
-      sessionSecret: foo
-      accessTokens:
-        admin: foor
-        client: bar
+      host: test-unleash-goberlec.apps.appint-ex-01.e7t8.p1.openshiftapps.com
+      secret: demo-config
     db:
-      host: postgresql
-      port: 5432
-      user: demo
-      password: demo
-      name: demo
+      secret: db-secret
       ssl: false

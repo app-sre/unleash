@@ -16,7 +16,7 @@ docker --config="${DOCKER_CONF}" push "${IMAGE_NAME}:latest"
 docker --config="${DOCKER_CONF}" push "${IMAGE_NAME}:${IMAGE_TAG}"
 
 # build and push PKO image
-docker run -v .:/unleash:z quay.io/app-sre/package-operator-cli:a03f0f0 build -t "${PKO_IMAGE_NAME}:${IMAGE_TAG}" -t "${PKO_IMAGE_NAME}:latest" /unleash/pko/package -o /unleash/pko/image.tgz
+docker run -v .:/unleash:z quay.io/app-sre/package-operator-cli:92430cd build -t "${PKO_IMAGE_NAME}:${IMAGE_TAG}" -t "${PKO_IMAGE_NAME}:latest" /unleash/pko/package -o /unleash/pko/image.tgz
 docker load < pko/image.tgz
 docker --config="${DOCKER_CONF}" push "${PKO_IMAGE_NAME}:latest"
 docker --config="${DOCKER_CONF}" push "${PKO_IMAGE_NAME}:${IMAGE_TAG}"
