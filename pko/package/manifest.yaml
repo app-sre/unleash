@@ -39,7 +39,11 @@ spec:
             image:
               type: string
               description: reference to the image containing unleash
-              default: quay.io/app-sre/unleash:latest
+              default: quay.io/app-sre/unleash
+            imageTag:
+              type: string
+              description: tag of the image containing unleash
+              default: UNLEASH_IMAGE_TAG
             replicas:
               description: number of replicas for the unleash deployment
               type: integer
