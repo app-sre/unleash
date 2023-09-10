@@ -14,9 +14,8 @@ objects:
     labels:
       app: ${identifier}
     name: ${identifier}
-    metadata:
-      annotations:
-        ignore-check.kube-linter.io/unset-cpu-requirements: "no cpu limits"
+    annotations:
+      ignore-check.kube-linter.io/unset-cpu-requirements: "no cpu limits"
   spec:
     replicas: ${{REPLICAS}}
     strategy:
