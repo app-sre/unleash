@@ -1,0 +1,6 @@
+unleash:
+  host: test.unleash.devshift.net
+  secret: unleash-config
+db:
+  secret: db-secret
+  ssl: false

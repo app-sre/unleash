@@ -1,0 +1,13 @@
+apiVersion: package-operator.run/v1alpha1
+kind: Package
+metadata:
+  name: demo
+spec:
+  image: quay.io/app-sre/unleash-pko:latest
+  config:
+    unleash:
+      host: test-unleash-goberlec.apps.appint-ex-01.e7t8.p1.openshiftapps.com
+      secret: demo-config
+    db:
+      secret: db-secret
+      ssl: false

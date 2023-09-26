@@ -1,0 +1,217 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: "unleash-{{.package.metadata.name}}"
+  annotations:
+    package-operator.run/phase: deploy
+---
+apiVersion: package-operator.run/v1alpha1
+kind: ObjectTemplate
+metadata:
+  name: "unleash-deployment-{{.package.metadata.name}}"
+  annotations:
+    package-operator.run/phase: deploy
+spec:
+  sources:
+    - apiVersion: v1
+      items:
+        - destination: .db
+          key: .data
+      kind: Secret
+      name: {{.config.db.secret}}
+    - apiVersion: v1
+      items:
+        - destination: .cfg
+          key: .data
+      kind: Secret
+      name: {{.config.unleash.secret}}
+  template: |
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: "unleash-{{.package.metadata.name}}"
+      labels:
+        app: "unleash-{{.package.metadata.name}}"
+    spec:
+      replicas: {{.config.unleash.replicas}}
+      strategy:
+        type: RollingUpdate
+        rollingUpdate:
+          maxUnavailable: 0
+          maxSurge: 1
+      selector:
+        matchLabels:
+          app: "unleash-{{.package.metadata.name}}"
+      template:
+        metadata:
+          labels:
+            app: "unleash-{{.package.metadata.name}}"
+          annotations:
+            db-secret-sha: {{ "{{ toJson .config.db | sha256sum }}" }}
+            cfg-sha: {{ "{{ toJson .config.cfg | sha256sum }}" }}
+        spec:
+          affinity:
+            podAntiAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution:
+              - podAffinityTerm:
+                  labelSelector:
+                    matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                      - "unleash-{{.package.metadata.name}}"
+                  topologyKey: "kubernetes.io/hostname"
+                weight: 100
+          serviceAccountName: "unleash-{{.package.metadata.name}}"
+          containers:
+          - image: "{{.config.unleash.image}}"
+            name: unleash
+            env:
+              # database settings
+              - name: DATABASE_HOST
+                valueFrom:
+                  secretKeyRef:
+                    name: "{{.config.db.secret}}"
+                    key: db.host
+              - name: DATABASE_PORT
+                valueFrom:
+                  secretKeyRef:
+                    name: "{{.config.db.secret}}"
+                    key: db.port
+              - name: DATABASE_USERNAME
+                valueFrom:
+                  secretKeyRef:
+                    name: "{{.config.db.secret}}"
+                    key: db.user
+              - name: DATABASE_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: "{{.config.db.secret}}"
+                    key: db.password
+              - name: DATABASE_NAME
+                valueFrom:
+                  secretKeyRef:
+                    name: "{{.config.db.secret}}"
+                    key: db.name
+              - name: DATABASE_SSL
+                value: "{{.config.db.ssl}}"
+              # keycloak settings
+              - name: KC_HOST
+                valueFrom:
+                  secretKeyRef:
+                    name: "{{.config.unleash.secret}}"
+                    key: KC_HOST
+              - name: KC_REALM
+                valueFrom:
+                  secretKeyRef:
+                    name: "{{.config.unleash.secret}}"
+                    key: KC_REALM
+              - name: KC_CLIENT_ID
+                valueFrom:
+                  secretKeyRef:
+                    name: "{{.config.unleash.secret}}"
+                    key: KC_CLIENT_ID
+              - name: KC_CLIENT_SECRET
+                valueFrom:
+                  secretKeyRef:
+                    name: "{{.config.unleash.secret}}"
+                    key: KC_CLIENT_SECRET
+              # roles
+              - name: KC_ADMIN_ROLES
+                valueFrom:
+                  secretKeyRef:
+                    name: "{{.config.unleash.secret}}"
+                    key: KC_ADMIN_ROLES
+              - name: KC_EDITOR_ROLES
+                valueFrom:
+                  secretKeyRef:
+                    name: "{{.config.unleash.secret}}"
+                    key: KC_EDITOR_ROLES
+              - name: KC_VIEWER_ROLES
+                valueFrom:
+                  secretKeyRef:
+                    name: "{{.config.unleash.secret}}"
+                    key: KC_VIEWER_ROLES
+              # custom tokens
+              - name: ADMIN_ACCESS_TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    name: "{{.config.unleash.secret}}"
+                    key: ADMIN_ACCESS_TOKEN
+              - name: CLIENT_ACCESS_TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    name: "{{.config.unleash.secret}}"
+                    key: CLIENT_ACCESS_TOKEN
+              # misc settings
+              - name: UNLEASH_URL
+                value: "https://{{.config.unleash.host}}"
+              - name: SESSION_SECRET
+                valueFrom:
+                  secretKeyRef:
+                    name: "{{.config.unleash.secret}}"
+                    key: SESSION_SECRET
+            ports:
+            - name: unleash
+              containerPort: 4242
+            resources:
+              requests:
+                memory: "{{.config.unleash.resources.requests.memory}}"
+                cpu: "{{.config.unleash.resources.requests.cpu}}"
+              limits:
+                memory: "{{.config.unleash.resources.limits.memory}}"
+                cpu: "{{.config.unleash.resources.limits.cpu}}"
+            readinessProbe:
+              failureThreshold: 3
+              initialDelaySeconds: 5
+              periodSeconds: 10
+              successThreshold: 1
+              tcpSocket:
+                port: 4242
+              timeoutSeconds: 1
+            livenessProbe:
+              failureThreshold: 3
+              initialDelaySeconds: 5
+              periodSeconds: 10
+              successThreshold: 1
+              tcpSocket:
+                port: 4242
+              timeoutSeconds: 1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "unleash-{{.package.metadata.name}}"
+  annotations:
+    package-operator.run/phase: deploy
+  labels:
+    app: "unleash-{{.package.metadata.name}}"
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 4242
+      name: unleash
+  selector:
+    app: "unleash-{{.package.metadata.name}}"
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    cert-manager.io/issuer-kind: ClusterIssuer
+    cert-manager.io/issuer-name: {{.config.unleash.letsEncryptIssuer}}
+    package-operator.run/phase: deploy
+  labels:
+    service: "unleash-{{.package.metadata.name}}"
+  name: "unleash-{{.package.metadata.name}}"
+spec:
+  host: "{{.config.unleash.host}}"
+  to:
+    kind: Service
+    name: "unleash-{{.package.metadata.name}}"
+    weight: 100
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
