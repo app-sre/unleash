@@ -1,6 +1,8 @@
 unleash:
   host: test.unleash.devshift.net
-  secret: unleash-config
+  common_secret: demo-config
+  tenant_secret: tenent-secret
 db:
-  secret: db-secret
-  ssl: false
+  admin_secret: creds
+  ssl: true
+  
