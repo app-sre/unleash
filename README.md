@@ -8,12 +8,6 @@ The Unleash Feature Toggle Service gets all its configurations from
 environment variables. Here's the description of the variables that have
 to be provided:
 
-User validation:
-
-- `ORG`: The Github organization users have to be member of.
-- `TEAM`: The Github organization team users have to be member of to be admin in Unleash
-- `READ_ONLY_TEAM`: The Github organization team users have to be member of to have read only access to Unleash
-
 Database:
 
 - `DATABASE_NAME`: The database to use backing this instance.
@@ -21,11 +15,15 @@ Database:
 - `DATABASE_USERNAME`: The database username.
 - `DATABASE_PASSWORD`: The database password.
 
-OAuth2:
+Keycloak:
 
-- `GH_CLIENT_ID`: The Github OAuth App Client ID.
-- `GH_CLIENT_SECRET`: The Github OAuth App Client Secret.
-- `GH_CALLBACK_URL`: The OAuth callback URL.
+- `KC_HOST`: The Keycloak url.
+- `KC_REALM`: The Keycloak realm.
+- `KC_CLIENT_ID`: The Keycloak client id.
+- `KC_CLIENT_SECRET`: The Keycloak client secret.
+- `KC_ADMIN_ROLES`: The Keycloak admin roles, separated by comma.
+- `KC_EDITOR_ROLES`: The Keycloak editor roles, separated by comma.
+- `KC_VIEWER_ROLES`: The Keycloak viewer roles, separated by comma.
 
 API Access:
 
@@ -65,6 +63,16 @@ $ docker build -t unleash .
 ```
 $ docker run --rm -d -p 4242:4242 unleash
 ```
+
+### Running with Docker Compose
+
+#### Run
+
+```
+$ docker-compose up --build
+```
+
+Default users can be found in [unleash-users-0.json](./keycloak_data/unleash-users-0.json), password is `unleash`.
 
 ## API
 
