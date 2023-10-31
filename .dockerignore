@@ -2,3 +2,7 @@
 .env
 node_modules
 node-debug.log
+dashboards
+keycloak_data
+openshift
+pko
