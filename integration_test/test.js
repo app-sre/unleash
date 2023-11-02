@@ -34,15 +34,21 @@ export function homepage () {
 }
 
 export function apiClientFeatures () {
+  const res1 = http.get(API_CLIENT_FEATURES_URL)
+
+  check(res1, {
+    'unauthenticated apiClientFeatures response code was 401': (res) => res.status === 401
+  })
+
   const params = {
     headers: {
       Authorization: CLIENT_ACCESS_TOKEN
     }
   }
 
-  const res = http.get(API_CLIENT_FEATURES_URL, params)
+  const res2 = http.get(API_CLIENT_FEATURES_URL, params)
 
-  check(res, {
-    'apiClientFeatures response code was 200': (res) => res.status === 200
+  check(res2, {
+    'authenticated apiClientFeatures response code was 200': (res) => res.status === 200
   })
 }
