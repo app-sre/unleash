@@ -1,0 +1,62 @@
+---
+apiVersion: v1
+kind: Template
+metadata:
+  name: unleash-integration-test
+objects:
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    name: ${SERVICE_ACCOUNT}
+- apiVersion: batch/v1
+  kind: Job
+  metadata:
+    annotations:
+      ignore-check.kube-linter.io/unset-cpu-requirements: "no cpu limits"
+    name: unleash-integration-test-${IMAGE_TAG}
+  spec:
+    backoffLimit: 5
+    template:
+      spec:
+        restartPolicy: Never
+        serviceAccountName: ${SERVICE_ACCOUNT}
+        containers:
+        - image: ${IMAGE}:${IMAGE_TAG_PREFIX}${IMAGE_TAG}
+          imagePullPolicy: Always
+          name: unleash-integration-test
+          env:
+          - name: UNLEASH_BASE_URL
+            value: ${UNLEASH_BASE_URL}
+          - name: CLIENT_ACCESS_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: ${CLIENT_ACCESS_TOKEN_SECRET}
+                key: CLIENT_ACCESS_TOKEN
+          resources:
+            requests:
+              memory: ${MEMORY_REQUESTS}
+              cpu: ${CPU_REQUESTS}
+            limits:
+              memory: ${MEMORY_LIMIT}
+parameters:
+- name: IMAGE
+  value: quay.io/app-sre/unleash
+- name: IMAGE_TAG_PREFIX
+  value: 'integration-test-'
+- name: IMAGE_TAG
+  value: ''
+  required: true
+- name: UNLEASH_BASE_URL
+  value: ''
+  required: true
+- name: CLIENT_ACCESS_TOKEN_SECRET
+  value: ''
+  required: true
+- name: SERVICE_ACCOUNT
+  value: unleash-integration-test
+- name: MEMORY_REQUESTS
+  value: 100Mi
+- name: MEMORY_LIMIT
+  value: 100Mi
+- name: CPU_REQUESTS
+  value: 50m
