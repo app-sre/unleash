@@ -68,6 +68,8 @@ $ docker run --rm -d -p 4242:4242 unleash
 
 #### Run
 
+Copy [.env.example](./.env.example) to `.env`.
+
 ```
 $ docker-compose up --build
 ```
