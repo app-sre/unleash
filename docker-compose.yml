@@ -16,13 +16,11 @@ services:
       KC_HOST: "http://host.docker.internal:8080"
       KC_REALM: "unleash"
       KC_CLIENT_ID: "unleash"
-      KC_CLIENT_SECRET: "ZYhToGucoRMwaWHxXyGKsjunXlXV6Uto"
       KC_ADMIN_ROLES: "admin"
       KC_EDITOR_ROLES: "editor"
       KC_VIEWER_ROLES: "viewer"
-      ADMIN_ACCESS_TOKEN: "ADMIN_ACCESS_TOKEN"
-      CLIENT_ACCESS_TOKEN: "CLIENT_ACCESS_TOKEN"
-      SESSION_SECRET: "SESSION_SECRET"
+    env_file:
+    - .env
     depends_on:
     - db
     - keycloak
