@@ -22,9 +22,10 @@ docker --config="${DOCKER_CONF}" push "${IMAGE_NAME}:${IMAGE_TAG}"
 docker --config="${DOCKER_CONF}" push "${IMAGE_NAME}:${INTEGRATION_TEST_IMAGE_TAG_PREFIX}${IMAGE_TAG}"
 
 # build and push PKO image
-cp -R $PWD/pko/package/ ${PWD}/pko/tmp
-docker run -v .:/unleash:z quay.io/app-sre/ubi8-ubi-minimal:8.8 sed -i "s/UNLEASH_IMAGE_TAG/$IMAGE_TAG/g" /unleash/pko/tmp/manifest.yaml
-docker run -v .:/unleash:z quay.io/app-sre/package-operator-cli:92430cd build -t "${PKO_IMAGE_NAME}:${IMAGE_TAG}" -t "${PKO_IMAGE_NAME}:latest" /unleash/pko/tmp -o /unleash/pko/image.tgz
+docker build -t "pko-build:latest" -f pko/Dockerfile --build-arg="PKO_IMAGE_NAME=$PKO_IMAGE_NAME" --build-arg="IMAGE_TAG=$IMAGE_TAG" ./pko
+docker create --name pko-build pko-build:latest
+docker cp pko-build:/tmp/image.tgz pko/image.tgz
+docker rm pko-build
 docker load < pko/image.tgz
 docker --config="${DOCKER_CONF}" push "${PKO_IMAGE_NAME}:latest"
 docker --config="${DOCKER_CONF}" push "${PKO_IMAGE_NAME}:${IMAGE_TAG}"
