@@ -1,6 +1,6 @@
-ARG REPO_PATH=grafana
+ARG K6_IMAGE=grafana/k6
 
-FROM ${REPO_PATH}/k6:0.47.0
+FROM ${K6_IMAGE}:0.47.0
 
 COPY test.js test.js
 
