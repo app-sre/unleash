@@ -22,10 +22,12 @@ docker --config="${DOCKER_CONF}" push "${IMAGE_NAME}:${IMAGE_TAG}"
 docker --config="${DOCKER_CONF}" push "${IMAGE_NAME}:${INTEGRATION_TEST_IMAGE_TAG_PREFIX}${IMAGE_TAG}"
 
 # build and push PKO image
-docker build -t "pko-build:latest" -f pko/Dockerfile --build-arg="PKO_IMAGE_NAME=$PKO_IMAGE_NAME" --build-arg="IMAGE_TAG=$IMAGE_TAG" ./pko
-docker create --name pko-build pko-build:latest
-docker cp pko-build:/tmp/image.tgz pko/image.tgz
-docker rm pko-build
+PKO_BUILD_IMAGE="pko-build:${IMAGE_TAG}"
+PKO_BUILD_CONTAINER="pko-build-${IMAGE_TAG}"
+docker build -t "$PKO_BUILD_IMAGE" -f pko/Dockerfile --build-arg="PKO_IMAGE_NAME=$PKO_IMAGE_NAME" --build-arg="IMAGE_TAG=$IMAGE_TAG" ./pko
+docker create --name "$PKO_BUILD_CONTAINER" "$PKO_BUILD_IMAGE"
+docker cp "$PKO_BUILD_CONTAINER":/tmp/image.tgz pko/image.tgz
+docker rm "$PKO_BUILD_CONTAINER"
 docker load < pko/image.tgz
 docker --config="${DOCKER_CONF}" push "${PKO_IMAGE_NAME}:latest"
 docker --config="${DOCKER_CONF}" push "${PKO_IMAGE_NAME}:${IMAGE_TAG}"
