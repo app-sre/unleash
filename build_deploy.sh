@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 IMAGE_NAME="quay.io/app-sre/unleash"
 PKO_IMAGE_NAME="quay.io/app-sre/unleash-pko"
 INTEGRATION_TEST_IMAGE_TAG_PREFIX="integration-test-"

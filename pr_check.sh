@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 IMAGE_TEST=unleash-test
 IMAGE_INTEGRATION_TEST=unleash-integration-test
 K6_IMAGE="quay.io/app-sre/k6"
