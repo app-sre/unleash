@@ -1,25 +1,19 @@
-FROM registry.access.redhat.com/ubi8/nodejs-18-minimal
-
+FROM registry.access.redhat.com/ubi8/nodejs-18-minimal as base
 USER 1001
+COPY --chown=1001:0 package*.json .npmrc ./
 
-RUN set -eux && \
-  npm set progress=false && \
-  npm set update-notifier=false && \
-  npm set audit=false && \
-  npm set fund=false
+FROM base as dev
+RUN npm ci
+COPY --chown=1001:0 . .
 
-COPY --chown=1001:root package.json package-lock.json ./
-
+FROM base as prod
 ENV NODE_ENV production
+RUN npm ci
 
-RUN set -eux && \
-  npm ci && \
-  npm cache clean --force
-
-COPY --chown=1001:root . ./
-
+FROM base
+ENV NODE_ENV production
+COPY --from=prod --chown=1001:0 /opt/app-root/src/node_modules ./node_modules
+COPY --chown=1001:0 . .
 EXPOSE 4242
-
 ENTRYPOINT ["node"]
-
 CMD ["index.js"]
