@@ -13,6 +13,37 @@ const {
   CLIENT_ACCESS_TOKEN
 } = require('./env')
 
+const getRole = (userRoles) => {
+  if (
+    userRoles.some((item1) =>
+      KC_ADMIN_ROLES.some(
+        (item2) => item2.toLowerCase() === item1.toLowerCase()
+      )
+    )
+  ) {
+    return 'Admin'
+  }
+  if (
+    userRoles.some((item1) =>
+      KC_EDITOR_ROLES.some(
+        (item2) => item2.toLowerCase() === item1.toLowerCase()
+      )
+    )
+  ) {
+    return 'Editor'
+  }
+  if (
+    userRoles.some((item1) =>
+      KC_VIEWER_ROLES.some(
+        (item2) => item2.toLowerCase() === item1.toLowerCase()
+      )
+    )
+  ) {
+    return 'Viewer'
+  }
+  return null
+}
+
 const enableKeycloakOauth = (app, config, services) => {
   const { baseUriPath } = config.server
   const { userService, accessService } = services
@@ -33,37 +64,6 @@ const enableKeycloakOauth = (app, config, services) => {
 
       async (accessToken, refreshToken, profile, done) => {
         console.log(`username: ${profile.username} roles: ${profile.roles}`)
-
-        const getRole = (userRoles) => {
-          if (
-            userRoles.some((item1) =>
-              KC_ADMIN_ROLES.some(
-                (item2) => item2.toLowerCase() === item1.toLowerCase()
-              )
-            )
-          ) {
-            return 'Admin'
-          }
-          if (
-            userRoles.some((item1) =>
-              KC_EDITOR_ROLES.some(
-                (item2) => item2.toLowerCase() === item1.toLowerCase()
-              )
-            )
-          ) {
-            return 'Editor'
-          }
-          if (
-            userRoles.some((item1) =>
-              KC_VIEWER_ROLES.some(
-                (item2) => item2.toLowerCase() === item1.toLowerCase()
-              )
-            )
-          ) {
-            return 'Viewer'
-          }
-          return null
-        }
 
         const role = getRole(profile.roles || [])
         if (!role) {
@@ -138,5 +138,6 @@ const enableKeycloakOauth = (app, config, services) => {
 }
 
 module.exports = {
-  enableKeycloakOauth
+  enableKeycloakOauth,
+  getRole
 }

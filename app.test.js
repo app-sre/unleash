@@ -4,7 +4,7 @@ const express = require('express')
 jest.mock('./env')
 jest.mock('passport')
 
-const { enableKeycloakOauth } = require('./app')
+const { enableKeycloakOauth, getRole } = require('./app')
 const { ADMIN_ACCESS_TOKEN, CLIENT_ACCESS_TOKEN } = require('./env')
 
 describe('test app', () => {
@@ -55,5 +55,15 @@ describe('test app', () => {
     const response = await request(app).get('/api/auth/callback')
     expect(response.statusCode).toBe(302)
     expect(response.headers.location).toBe(`${baseUriPath}/`)
+  })
+})
+
+describe('test getRole', () => {
+  it.each([
+    [['admin'], 'Admin'],
+    [['editor'], 'Editor'],
+    [['viewer'], 'Viewer']
+  ])('getRole(%p) to return %s', (input, expected) => {
+    expect(getRole(input)).toBe(expected)
   })
 })
