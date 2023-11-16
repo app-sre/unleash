@@ -44,7 +44,7 @@ spec:
             imageTag:
               type: string
               description: tag of the image containing unleash
-              default: latest
+              default: UNLEASH_IMAGE_TAG
             replicas:
               description: number of replicas for the unleash deployment
               type: integer
