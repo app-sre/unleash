@@ -90,6 +90,9 @@ spec:
             tenant_secret:
               type: string
               description: Reference to the secret containing the tenant config
+            service_account_name:
+              type: string
+              description: Name of the service account to use
           required:
           - host
           - common_secret
