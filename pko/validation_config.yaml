@@ -2,6 +2,7 @@ unleash:
   host: test.unleash.devshift.net
   common_secret: demo-config
   tenant_secret: tenent-secret
+  service_account_name: test
 db:
   admin_secret: creds
   ssl: true
