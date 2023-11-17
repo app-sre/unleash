@@ -48,7 +48,7 @@ spec:
             replicas:
               description: number of replicas for the unleash deployment
               type: integer
-              default: 1
+              default: 3
             resources:
               type: object
               default: {}
