@@ -1,11 +1,4 @@
 ---
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: "unleash-{{.package.metadata.name}}"
-  annotations:
-    package-operator.run/phase: deploy
----
 apiVersion: package-operator.run/v1alpha1
 kind: ObjectTemplate
 metadata:
@@ -19,13 +12,19 @@ spec:
         - destination: .db
           key: .data
       kind: Secret
-      name: {{.config.db.secret}}
+      name: {{.config.unleash.common_secret}}
+    - apiVersion: v1
+      items:
+        - destination: .db
+          key: .data
+      kind: Secret
+      name: {{.config.unleash.tenant_secret}}
     - apiVersion: v1
       items:
         - destination: .cfg
           key: .data
       kind: Secret
-      name: {{.config.unleash.secret}}
+      name: {{.config.db.admin_secret}}
   template: |
     apiVersion: apps/v1
     kind: Deployment
@@ -63,7 +62,7 @@ spec:
                       - "unleash-{{.package.metadata.name}}"
                   topologyKey: "kubernetes.io/hostname"
                 weight: 100
-          serviceAccountName: "unleash-{{.package.metadata.name}}"
+          serviceAccountName: {{.config.unleash.service_account_name}}
           containers:
           - image: "{{.config.unleash.image}}"
             name: unleash
@@ -72,77 +71,73 @@ spec:
               - name: DATABASE_HOST
                 valueFrom:
                   secretKeyRef:
-                    name: "{{.config.db.secret}}"
+                    name: "{{.config.db.admin_secret}}"
                     key: db.host
               - name: DATABASE_PORT
                 valueFrom:
                   secretKeyRef:
-                    name: "{{.config.db.secret}}"
+                    name: "{{.config.db.admin_secret}}"
                     key: db.port
               - name: DATABASE_USERNAME
-                valueFrom:
-                  secretKeyRef:
-                    name: "{{.config.db.secret}}"
-                    key: db.user
+                value: "unleash-{{.package.metadata.name}}"
               - name: DATABASE_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: "{{.config.db.secret}}"
+                    name: "{{.config.unleash.tenant_secret}}"
                     key: db.password
               - name: DATABASE_NAME
-                valueFrom:
-                  secretKeyRef:
-                    name: "{{.config.db.secret}}"
-                    key: db.name
+                value: "unleash-{{.package.metadata.name}}"
               - name: DATABASE_SSL
                 value: "{{.config.db.ssl}}"
+              - name: DATABASE_SCHEMA
+                value: "unleash-{{.package.metadata.name}}"
               # keycloak settings
               - name: KC_HOST
                 valueFrom:
                   secretKeyRef:
-                    name: "{{.config.unleash.secret}}"
+                    name: "{{.config.unleash.common_secret}}"
                     key: KC_HOST
               - name: KC_REALM
                 valueFrom:
                   secretKeyRef:
-                    name: "{{.config.unleash.secret}}"
+                    name: "{{.config.unleash.common_secret}}"
                     key: KC_REALM
               - name: KC_CLIENT_ID
                 valueFrom:
                   secretKeyRef:
-                    name: "{{.config.unleash.secret}}"
+                    name: "{{.config.unleash.tenant_secret}}"
                     key: KC_CLIENT_ID
               - name: KC_CLIENT_SECRET
                 valueFrom:
                   secretKeyRef:
-                    name: "{{.config.unleash.secret}}"
+                    name: "{{.config.unleash.tenant_secret}}"
                     key: KC_CLIENT_SECRET
               # roles
               - name: KC_ADMIN_ROLES
                 valueFrom:
                   secretKeyRef:
-                    name: "{{.config.unleash.secret}}"
+                    name: "{{.config.unleash.tenant_secret}}"
                     key: KC_ADMIN_ROLES
               - name: KC_EDITOR_ROLES
                 valueFrom:
                   secretKeyRef:
-                    name: "{{.config.unleash.secret}}"
+                    name: "{{.config.unleash.tenant_secret}}"
                     key: KC_EDITOR_ROLES
               - name: KC_VIEWER_ROLES
                 valueFrom:
                   secretKeyRef:
-                    name: "{{.config.unleash.secret}}"
+                    name: "{{.config.unleash.tenant_secret}}"
                     key: KC_VIEWER_ROLES
               # custom tokens
               - name: ADMIN_ACCESS_TOKEN
                 valueFrom:
                   secretKeyRef:
-                    name: "{{.config.unleash.secret}}"
+                    name: "{{.config.unleash.tenant_secret}}"
                     key: ADMIN_ACCESS_TOKEN
               - name: CLIENT_ACCESS_TOKEN
                 valueFrom:
                   secretKeyRef:
-                    name: "{{.config.unleash.secret}}"
+                    name: "{{.config.unleash.tenant_secret}}"
                     key: CLIENT_ACCESS_TOKEN
               # misc settings
               - name: UNLEASH_URL
@@ -150,8 +145,10 @@ spec:
               - name: SESSION_SECRET
                 valueFrom:
                   secretKeyRef:
-                    name: "{{.config.unleash.secret}}"
+                    name: "{{.config.unleash.tenant_secret}}"
                     key: SESSION_SECRET
+              - name: NODE_TLS_REJECT_UNAUTHORIZED
+                value: "0"
             ports:
             - name: unleash
               containerPort: 4242
@@ -212,6 +209,4 @@ spec:
     kind: Service
     name: "unleash-{{.package.metadata.name}}"
     weight: 100
-  tls:
-    insecureEdgeTerminationPolicy: Redirect
-    termination: edge
+  # do not TLS, will be handled by cert-manager

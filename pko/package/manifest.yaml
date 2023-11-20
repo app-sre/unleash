@@ -6,6 +6,7 @@ spec:
   scopes:
   - Namespaced
   phases:
+  - name: predeploy
   - name: deploy
   availabilityProbes:
   - probes:
@@ -83,24 +84,31 @@ spec:
               type: string
               description: Name of the letscrypt ClusterIssuer to be used for the route
               default: letsencrypt-prod-http
-            secret:
+            common_secret:
               type: string
-              description: Reference to the secret containing the auth config
+              description: Reference to the secret containing the common config
+            tenant_secret:
+              type: string
+              description: Reference to the secret containing the tenant config
+            service_account_name:
+              type: string
+              description: Name of the service account to use
           required:
           - host
-          - secret
+          - common_secret
+          - tenant_secret
         db:
           type: object
           properties:
-            secret:
+            admin_secret:
               type: string
-              description: Reference to the DB secret
+              description: Reference to the Admin DB secret
             ssl:
               type: boolean
               default: true
               description: Whether to use SSL for the database connection
           required:
-          - secret
+          - admin_secret
           - ssl
       required:
       - unleash

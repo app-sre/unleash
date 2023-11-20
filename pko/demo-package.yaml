@@ -7,7 +7,8 @@ spec:
   config:
     unleash:
       host: test-unleash-goberlec.apps.appint-ex-01.e7t8.p1.openshiftapps.com
-      secret: demo-config
+      common_secret: demo-config
+      tenant_secret: tenent-secret
     db:
-      secret: db-secret
-      ssl: false
+      admin_secret: creds
+      ssl: true
