@@ -5,7 +5,6 @@ jest.mock('./env')
 jest.mock('passport')
 
 const { enableKeycloakOauth, getRole } = require('./app')
-const { ADMIN_ACCESS_TOKEN, CLIENT_ACCESS_TOKEN } = require('./env')
 
 describe('test app', () => {
   let app
@@ -36,19 +35,9 @@ describe('test app', () => {
     expect(response.statusCode).toBe(401)
   })
 
-  it('should return 404 with admin access token', async () => {
-    const response = await request(app).get('/api/admin/projects').set('Authorization', ADMIN_ACCESS_TOKEN)
-    expect(response.statusCode).toBe(200)
-  })
-
   it('should return 401 without client access token', async () => {
     const response = await request(app).get('/api/client/features')
     expect(response.statusCode).toBe(401)
-  })
-
-  it('should return 404 without client access token', async () => {
-    const response = await request(app).get('/api/client/features').set('Authorization', CLIENT_ACCESS_TOKEN)
-    expect(response.statusCode).toBe(200)
   })
 
   it('should redirect to base after auth', async () => {

@@ -103,25 +103,20 @@ objects:
               value: ${editor_roles}
             - name: KC_VIEWER_ROLES
               value: ${viewer_roles}
-            # custom tokens
-            - name: ADMIN_ACCESS_TOKEN
+            # init tokens
+            - name: INIT_ADMIN_API_TOKENS
               valueFrom:
                 secretKeyRef:
                   name: ${configSecret}
-                  key: ADMIN_ACCESS_TOKEN
-            - name: CLIENT_ACCESS_TOKEN
+                  key: INIT_ADMIN_API_TOKENS
+            - name: INIT_CLIENT_API_TOKENS
               valueFrom:
                 secretKeyRef:
                   name: ${tokenSecret}
-                  key: CLIENT_ACCESS_TOKEN
+                  key: INIT_CLIENT_API_TOKENS
             # misc settings
             - name: UNLEASH_URL
               value: https://${host}
-            - name: SESSION_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: ${configSecret}
-                  key: SESSION_SECRET
           ports:
           - name: unleash
             containerPort: 4242

@@ -1,4 +1,4 @@
-const unleash = require('unleash-server')
+const { AuthenticationRequired } = require('unleash-server')
 const KeycloakStrategy = require('./lib/strategy.js')
 const passport = require('passport')
 const {
@@ -8,9 +8,7 @@ const {
   KC_CLIENT_SECRET,
   KC_ADMIN_ROLES,
   KC_EDITOR_ROLES,
-  KC_VIEWER_ROLES,
-  ADMIN_ACCESS_TOKEN,
-  CLIENT_ACCESS_TOKEN
+  KC_VIEWER_ROLES
 } = require('./env')
 
 const getRole = (userRoles) => {
@@ -104,36 +102,21 @@ const enableKeycloakOauth = (app, config, services) => {
     }
   )
 
-  app.use('/api/admin/', (req, res, next) => {
+  app.use('/api', (req, res, next) => {
     if (req.user) {
-      return next()
-    } else if (
-      req.header('authorization') === `Bearer ${ADMIN_ACCESS_TOKEN}` ||
-            req.header('authorization') === `${ADMIN_ACCESS_TOKEN}`
-    ) {
       return next()
     }
     // Instruct unleash-frontend to pop-up auth dialog
     return res
       .status(401)
       .json(
-        new unleash.AuthenticationRequired({
+        new AuthenticationRequired({
           path: `${baseUriPath}/api/admin/login`,
           type: 'custom',
           message: 'You have to identify yourself in order to use Unleash. Click the button and follow the instructions.'
         })
       )
       .end()
-  })
-  app.use('/api/client', (req, res, next) => {
-    if (
-      req.header('authorization') === `Bearer ${CLIENT_ACCESS_TOKEN}` ||
-      req.header('authorization') === `${CLIENT_ACCESS_TOKEN}`
-    ) {
-      next()
-    } else {
-      res.sendStatus(401)
-    }
   })
 }
 
