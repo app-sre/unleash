@@ -2,9 +2,6 @@ const DATABASE_HOST = process.env.DATABASE_HOST
 const DATABASE_USERNAME = process.env.DATABASE_USERNAME
 const DATABASE_PASSWORD = process.env.DATABASE_PASSWORD
 const DATABASE_NAME = process.env.DATABASE_NAME
-const ADMIN_ACCESS_TOKEN = process.env.ADMIN_ACCESS_TOKEN
-const CLIENT_ACCESS_TOKEN = process.env.CLIENT_ACCESS_TOKEN
-const SESSION_SECRET = process.env.SESSION_SECRET
 const KC_HOST = process.env.KC_HOST
 const KC_REALM = process.env.KC_REALM
 const KC_CLIENT_ID = process.env.KC_CLIENT_ID
@@ -49,24 +46,12 @@ if (!KC_CLIENT_ID) {
 if (!KC_CLIENT_SECRET) {
   throw new Error('KC_CLIENT_SECRET not set!')
 }
-if (!ADMIN_ACCESS_TOKEN) {
-  throw new Error('ADMIN_ACCESS_TOKEN not set!')
-}
-if (!CLIENT_ACCESS_TOKEN) {
-  throw new Error('CLIENT_ACCESS_TOKEN not set!')
-}
-if (!SESSION_SECRET) {
-  throw new Error('SESSION_SECRET not set!')
-}
 
 module.exports = {
   DATABASE_HOST,
   DATABASE_USERNAME,
   DATABASE_PASSWORD,
   DATABASE_NAME,
-  ADMIN_ACCESS_TOKEN,
-  CLIENT_ACCESS_TOKEN,
-  SESSION_SECRET,
   KC_HOST,
   KC_REALM,
   KC_CLIENT_ID,

@@ -25,16 +25,13 @@ Keycloak:
 - `KC_EDITOR_ROLES`: The Keycloak editor roles, separated by comma.
 - `KC_VIEWER_ROLES`: The Keycloak viewer roles, separated by comma.
 
-API Access:
+[API Access](https://docs.getunleash.io/using-unleash/deploy/configuring-unleash#further-customization):
 
-- `ADMIN_ACCESS_TOKEN`: The Admin API token that admins have to
-  authenticate with.
-- `CLIENT_ACCESS_TOKEN`: The Client API token that clients have to
-  authenticate with.
-
-Security:
-
-- `SESSION_SECRET`: Token used to encrypt the user session cookie.
+- `INIT_ADMIN_API_TOKENS`: The Admin API token that admins have to
+  authenticate with. This is a comma separated list of tokens, [format](https://docs.getunleash.io/reference/api-tokens-and-client-keys#format).
+- `INIT_CLIENT_API_TOKENS`: The Client API token that clients have to
+  authenticate with. This is a comma separated list of tokens, [format](https://docs.getunleash.io/reference/api-tokens-and-client-keys#format).
+  Should include tokens for 3 environments (`default`, `develement`, `production`).
 
 ### Running Locally
 

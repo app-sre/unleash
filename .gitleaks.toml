@@ -4,4 +4,6 @@ description = "Global Allowlist"
 regexes = [
     # keycloak client secret used in local
     '''ZYhToGucoRMwaWHxXyGKsjunXlXV6Uto''',
+    # init unleash api tokens in local
+    '''be44368985f7fb3237c584ef86f3d6bdada42ddbd63a019d26955178''',
 ]

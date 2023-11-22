@@ -2,19 +2,13 @@
 
 const unleash = require('unleash-server')
 const { enableKeycloakOauth } = require('./app')
-const { SESSION_SECRET } = require('./env')
 
 const options = {
-  enableLegacyRoutes: false,
-  secret: SESSION_SECRET,
   authentication: {
     type: 'custom',
     customAuthHandler: enableKeycloakOauth
   },
-  server: {
-    enableRequestLogger: true,
-    baseUriPath: ''
-  },
+  enableRequestLogger: true,
   logLevel: 'info'
 }
 
