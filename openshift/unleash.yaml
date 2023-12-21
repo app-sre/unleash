@@ -162,7 +162,7 @@ objects:
   metadata:
     annotations:
       cert-manager.io/issuer-kind: ClusterIssuer
-      cert-manager.io/issuer-name: letsencrypt-prod-http
+      cert-manager.io/issuer-name: ${issuer_name}
     labels:
       service: ${identifier}
     name: ${identifier}
@@ -206,3 +206,5 @@ parameters:
   value: ""
 - name: viewer_roles
   value: ""
+- name: issuer_name
+  value: letsencrypt-prod-http
