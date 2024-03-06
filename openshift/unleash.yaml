@@ -137,8 +137,8 @@ objects:
             httpGet:
               path: /health
               port: unleash
-            initialDelaySeconds: 30
-            timeoutSeconds: 10
+              initialDelaySeconds: 30
+              timeoutSeconds: 10
           lifecycle:
             preStop:
               exec:
