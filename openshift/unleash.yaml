@@ -117,6 +117,19 @@ objects:
             # misc settings
             - name: UNLEASH_URL
               value: https://${host}
+            - name: NODE_EXTRA_CA_CERTS
+              value: '/etc/pki/ca-trust/source/anchors/ca.crt'
+            volumeMounts:
+            - name: ca-cert
+              mountPath: '/etc/pki/ca-trust/source/anchors/ca.crt'
+              subPath: cert
+          volumes:
+          - name: ca-cert
+            secret:
+              secretName: ca-certs
+              items:
+              - key: cert
+                path: cert
           ports:
           - name: unleash
             containerPort: 4242
