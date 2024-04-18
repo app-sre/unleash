@@ -118,10 +118,10 @@ objects:
             - name: UNLEASH_URL
               value: https://${host}
             - name: NODE_EXTRA_CA_CERTS
-              value: '/etc/pki/ca-trust/source/anchors/ca.crt'
+              value: ${INTERNAL_GIT_CA_PATH}
             volumeMounts:
             - name: ca-cert
-              mountPath: '/etc/pki/ca-trust/source/anchors/ca.crt'
+              mountPath: ${INTERNAL_GIT_CA_PATH}
               subPath: cert
           volumes:
           - name: ca-cert
@@ -221,3 +221,6 @@ parameters:
   value: ""
 - name: issuer_name
   value: letsencrypt-prod-http
+- name: INTERNAL_GIT_CA_PATH
+  description: 'path to certificate file to add in git config trust'
+  value: '/etc/pki/ca-trust/source/anchors/ca.crt'
