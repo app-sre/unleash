@@ -1,4 +1,5 @@
 ---
+# Source: unleash/templates/template.yaml
 apiVersion: v1
 kind: Template
 metadata:

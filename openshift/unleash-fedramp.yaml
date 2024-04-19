@@ -1,4 +1,5 @@
 ---
+# Source: unleash/templates/template.yaml
 apiVersion: v1
 kind: Template
 metadata:
@@ -119,10 +120,10 @@ objects:
               value: https://${host}
             - name: NODE_EXTRA_CA_CERTS
               value: ${INTERNAL_GIT_CA_PATH}
-            volumeMounts:
-            - name: ca-cert
-              mountPath: ${INTERNAL_GIT_CA_PATH}
-              subPath: cert
+          volumeMounts:
+          - name: ca-cert
+            mountPath: ${INTERNAL_GIT_CA_PATH}
+            subPath: cert
           volumes:
           - name: ca-cert
             secret:
