@@ -21,14 +21,14 @@
   "license": "ISC",
   "dependencies": {
     "jsonwebtoken": "^9.0.1",
-    "passport": "^0.6.0",
-    "passport-oauth2": "^1.7.0",
-    "unleash-server": "5.8.2"
+    "passport": "^0.7.0",
+    "passport-oauth2": "^1.8.0",
+    "unleash-server": "5.11.3"
   },
   "devDependencies": {
-    "eslint": "^8.54.0",
+    "eslint": "^8.57.0",
     "eslint-config-standard": "^17.1.0",
     "jest": "^29.7.0",
-    "supertest": "^6.3.3"
+    "supertest": "^6.3.4"
   }
 }
