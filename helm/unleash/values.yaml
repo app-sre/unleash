@@ -1,1 +1,10 @@
 internal_certs: true
+tenants:
+  - app-interface-stage
+  # - app-interface-prod
+  # - ocm-stage
+  # - ocm-int
+  # - ocm
+  # - insights-stage
+  # - insights-int
+  # - insights

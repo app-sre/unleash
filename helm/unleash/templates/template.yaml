@@ -121,10 +121,13 @@ objects:
             - name: NODE_EXTRA_CA_CERTS
               value: ${INTERNAL_GIT_CA_PATH}
           volumeMounts:
-          - name: ca-cert
+          {{- $tenants := .Values.tenants}}
+          {{- range $index, $tenant := $tenants}}
+          - name: {{ printf "%s-ca-cert" $tenant }}
             mountPath: ${INTERNAL_GIT_CA_PATH}
             subPath: cert
             {{- end}}
+          {{- end}}
           ports:
           - name: unleash
             containerPort: 4242
@@ -153,12 +156,15 @@ objects:
                 command: [ "sleep", "10" ]
         {{- if .Values.internal_certs }}
         volumes:
-        - name: ca-cert
+        {{- $tenants := .Values.tenants}}
+        {{- range $index, $tenant := $tenants}}
+        - name: {{ printf "%s-ca-cert" $tenant }}
           secret:
-            secretName: ca-certs
+            secretName: {{ printf "%s-ca-certs" $tenant }}
             items:
             - key: cert
               path: cert
+        {{- end}}
         {{- end}}
 - apiVersion: v1
   kind: Service
