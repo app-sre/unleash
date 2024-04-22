@@ -137,6 +137,8 @@ parameters:
   value: 200Mi
 - name: CPU_REQUESTS
   value: 50m
+- name: issuer_name
+  value: letsencrypt-prod-http
 - name: identifier
   value: app-interface-edge
 - name: host
