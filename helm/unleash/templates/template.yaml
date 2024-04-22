@@ -1,5 +1,4 @@
 ---
-# Source: unleash/templates/template.yaml
 apiVersion: v1
 kind: Template
 metadata:
@@ -18,7 +17,7 @@ objects:
     annotations:
       ignore-check.kube-linter.io/unset-cpu-requirements: "no cpu limits"
   spec:
-    replicas: ${{REPLICAS}}
+    replicas: {{`${{REPLICAS}}`}}
     strategy:
       type: RollingUpdate
       rollingUpdate:
@@ -118,6 +117,21 @@ objects:
             # misc settings
             - name: UNLEASH_URL
               value: https://${host}
+            {{- if .Values.internal_certs }}
+            - name: NODE_EXTRA_CA_CERTS
+              value: ${INTERNAL_GIT_CA_PATH}
+          volumeMounts:
+          - name: ca-cert
+            mountPath: ${INTERNAL_GIT_CA_PATH}
+            subPath: cert
+          volumes:
+          - name: ca-cert
+            secret:
+              secretName: ca-certs
+              items:
+              - key: cert
+                path: cert
+            {{- end}}
           ports:
           - name: unleash
             containerPort: 4242
@@ -209,3 +223,8 @@ parameters:
   value: ""
 - name: issuer_name
   value: letsencrypt-prod-http
+{{- if .Values.internal_certs }}
+- name: INTERNAL_GIT_CA_PATH
+  description: 'path to certificate file to add in git config trust'
+  value: '/etc/pki/ca-trust/source/anchors/ca.crt'
+{{- end}}

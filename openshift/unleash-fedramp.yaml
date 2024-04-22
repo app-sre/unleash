@@ -118,6 +118,19 @@ objects:
             # misc settings
             - name: UNLEASH_URL
               value: https://${host}
+            - name: NODE_EXTRA_CA_CERTS
+              value: ${INTERNAL_GIT_CA_PATH}
+          volumeMounts:
+          - name: ca-cert
+            mountPath: ${INTERNAL_GIT_CA_PATH}
+            subPath: cert
+          volumes:
+          - name: ca-cert
+            secret:
+              secretName: ca-certs
+              items:
+              - key: cert
+                path: cert
           ports:
           - name: unleash
             containerPort: 4242
@@ -209,3 +222,6 @@ parameters:
   value: ""
 - name: issuer_name
   value: letsencrypt-prod-http
+- name: INTERNAL_GIT_CA_PATH
+  description: 'path to certificate file to add in git config trust'
+  value: '/etc/pki/ca-trust/source/anchors/ca.crt'

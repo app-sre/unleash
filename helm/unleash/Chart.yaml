@@ -1,0 +1,7 @@
+apiVersion: v2
+name: unleash
+description: An Unleash Helm chart for Openshift (used to generate OpenShift template)
+type: application
+version: 0.1.0
+appVersion: 0.1.0
+icon: https://avatars3.githubusercontent.com/u/43133889
