@@ -124,27 +124,6 @@ objects:
           - name: app-interface-stage-ca-cert
             mountPath: ${INTERNAL_GIT_CA_PATH}
             subPath: cert
-          - name: app-interface-prod-ca-cert
-            mountPath: ${INTERNAL_GIT_CA_PATH}
-            subPath: cert
-          - name: ocm-stage-ca-cert
-            mountPath: ${INTERNAL_GIT_CA_PATH}
-            subPath: cert
-          - name: ocm-int-ca-cert
-            mountPath: ${INTERNAL_GIT_CA_PATH}
-            subPath: cert
-          - name: ocm-ca-cert
-            mountPath: ${INTERNAL_GIT_CA_PATH}
-            subPath: cert
-          - name: insights-stage-ca-cert
-            mountPath: ${INTERNAL_GIT_CA_PATH}
-            subPath: cert
-          - name: insights-int-ca-cert
-            mountPath: ${INTERNAL_GIT_CA_PATH}
-            subPath: cert
-          - name: insights-ca-cert
-            mountPath: ${INTERNAL_GIT_CA_PATH}
-            subPath: cert
           ports:
           - name: unleash
             containerPort: 4242
@@ -175,48 +154,6 @@ objects:
         - name: app-interface-stage-ca-cert
           secret:
             secretName: app-interface-stage-ca-certs
-            items:
-            - key: cert
-              path: cert
-        - name: app-interface-prod-ca-cert
-          secret:
-            secretName: app-interface-prod-ca-certs
-            items:
-            - key: cert
-              path: cert
-        - name: ocm-stage-ca-cert
-          secret:
-            secretName: ocm-stage-ca-certs
-            items:
-            - key: cert
-              path: cert
-        - name: ocm-int-ca-cert
-          secret:
-            secretName: ocm-int-ca-certs
-            items:
-            - key: cert
-              path: cert
-        - name: ocm-ca-cert
-          secret:
-            secretName: ocm-ca-certs
-            items:
-            - key: cert
-              path: cert
-        - name: insights-stage-ca-cert
-          secret:
-            secretName: insights-stage-ca-certs
-            items:
-            - key: cert
-              path: cert
-        - name: insights-int-ca-cert
-          secret:
-            secretName: insights-int-ca-certs
-            items:
-            - key: cert
-              path: cert
-        - name: insights-ca-cert
-          secret:
-            secretName: insights-ca-certs
             items:
             - key: cert
               path: cert
