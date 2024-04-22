@@ -124,7 +124,7 @@ objects:
           - name: ca-cert
             mountPath: ${INTERNAL_GIT_CA_PATH}
             subPath: cert
-          {{- end}}
+            {{- end}}
           ports:
           - name: unleash
             containerPort: 4242
