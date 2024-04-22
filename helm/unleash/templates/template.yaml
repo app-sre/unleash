@@ -124,14 +124,14 @@ objects:
           - name: ca-cert
             mountPath: ${INTERNAL_GIT_CA_PATH}
             subPath: cert
-          volumes:
-          - name: ca-cert
-            secret:
-              secretName: ca-certs
-              items:
-              - key: cert
-                path: cert
-            {{- end}}
+        volumes:
+        - name: ca-cert
+          secret:
+            secretName: ca-certs
+            items:
+            - key: cert
+              path: cert
+          {{- end}}
           ports:
           - name: unleash
             containerPort: 4242
