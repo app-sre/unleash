@@ -124,13 +124,6 @@ objects:
           - name: ca-cert
             mountPath: ${INTERNAL_GIT_CA_PATH}
             subPath: cert
-          volumes:
-          - name: ca-cert
-            secret:
-              secretName: ca-certs
-              items:
-              - key: cert
-                path: cert
             {{- end}}
           ports:
           - name: unleash
@@ -158,6 +151,15 @@ objects:
             preStop:
               exec:
                 command: [ "sleep", "10" ]
+        {{- if .Values.internal_certs }}
+        volumes:
+        - name: ca-cert
+          secret:
+            secretName: ca-certs
+            items:
+            - key: cert
+              path: cert
+        {{- end}}
 - apiVersion: v1
   kind: Service
   metadata:
