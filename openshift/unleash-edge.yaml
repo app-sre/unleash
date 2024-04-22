@@ -51,6 +51,8 @@ objects:
         - image: ${IMAGE}:${unleashEdgeVersion}
           imagePullPolicy: Always
           name: ${identifier}
+          args:
+          - edge
           env:
             - name: APP_NAME
               value: ${identifier}
@@ -72,7 +74,7 @@ objects:
               memory: ${MEMORY_LIMIT}
           readinessProbe:
             exec:
-              command: ["unleash-edge", "ready"]
+              command: ["/unleash-edge", "ready"]
             initialDelaySeconds: 1
             timeoutSeconds: 5
             periodSeconds: 30
@@ -80,7 +82,7 @@ objects:
             failureThreshold: 3
           livenessProbe:
             exec:
-              command: ["unleash-edge", "health"]
+              command: ["/unleash-edge", "health"]
             initialDelaySeconds: 30
             timeoutSeconds: 5
             periodSeconds: 30
