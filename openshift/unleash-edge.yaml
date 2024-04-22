@@ -8,6 +8,9 @@ objects:
   kind: ServiceAccount
   metadata:
     name: ${identifier}
+  imagePullSecrets:
+  - name: ${IMAGE_PULL_SECRET}
+
 - apiVersion: apps/v1
   kind: Deployment
   metadata:
@@ -137,6 +140,8 @@ parameters:
   value: 200Mi
 - name: CPU_REQUESTS
   value: 50m
+- name: IMAGE_PULL_SECRET
+  value: quay.io
 - name: issuer_name
   value: letsencrypt-prod-http
 - name: identifier
