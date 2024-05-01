@@ -121,9 +121,9 @@ objects:
             - name: NODE_EXTRA_CA_CERTS
               value: ${INTERNAL_GIT_CA_PATH}
           volumeMounts:
-          - name: ${TENANT_NAME}-ca-cert
+          - name: ca-certs
             mountPath: ${INTERNAL_GIT_CA_PATH}
-            subPath: cert
+            subPath: ca.crt
           ports:
           - name: unleash
             containerPort: 4242
@@ -151,12 +151,12 @@ objects:
               exec:
                 command: [ "sleep", "10" ]
         volumes:
-        - name: ${TENANT_NAME}-ca-cert
+        - name: ca-certs
           secret:
-            secretName: ${TENANT_NAME}-ca-certs
+            secretName: ca-certs
             items:
-            - key: cert
-              path: cert
+            - key: ca.crt
+              path: ca.crt
 - apiVersion: v1
   kind: Service
   metadata:
@@ -225,5 +225,3 @@ parameters:
 - name: INTERNAL_GIT_CA_PATH
   description: 'path to certificate file to add in git config trust'
   value: '/etc/pki/ca-trust/source/anchors/ca.crt'
-- name: TENANT_NAME
-  value: 'app-interface'
