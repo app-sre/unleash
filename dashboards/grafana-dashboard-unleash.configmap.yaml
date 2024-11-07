@@ -27,8 +27,7 @@ data:
       "editable": true,
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
-      "id": 536,
-      "iteration": 1662663457003,
+      "id": 952688,
       "links": [],
       "liveNow": false,
       "panels": [
@@ -78,16 +77,20 @@ data:
               "fields": "",
               "values": false
             },
-            "textMode": "auto"
+            "showPercentChange": false,
+            "textMode": "auto",
+            "wideLayout": true
           },
-          "pluginVersion": "9.0.3",
+          "pluginVersion": "10.4.1",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "${datasource}"
               },
-              "expr": "count(kube_pod_status_ready{namespace=~\"unleash\", pod=~\".+\", condition=~\"false|unknown\"} == 1)",
+              "editorMode": "code",
+              "expr": "sum(sum by (pod) (kube_pod_status_ready{condition=~\"unknown|false\",namespace=~\"unleash.*\"}))",
+              "range": true,
               "refId": "A"
             }
           ],
@@ -106,7 +109,9 @@ data:
               },
               "custom": {
                 "align": "auto",
-                "displayMode": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
                 "inspect": false
               },
               "mappings": [],
@@ -141,13 +146,15 @@ data:
           },
           "gridPos": {
             "h": 8,
-            "w": 12,
-            "x": 12,
-            "y": 0
+            "w": 24,
+            "x": 0,
+            "y": 8
           },
           "id": 2,
           "options": {
+            "cellHeight": "sm",
             "footer": {
+              "countRows": false,
               "enablePagination": true,
               "fields": "",
               "reducer": [
@@ -158,7 +165,7 @@ data:
             "showHeader": true,
             "sortBy": []
           },
-          "pluginVersion": "9.0.3",
+          "pluginVersion": "10.4.1",
           "repeat": "datasource",
           "repeatDirection": "h",
           "targets": [
@@ -168,7 +175,7 @@ data:
                 "uid": "${datasource}"
               },
               "editorMode": "code",
-              "expr": "kube_pod_container_status_ready{namespace=~\"unleash\", pod=~\".+\"} == 0",
+              "expr": "kube_pod_container_status_ready{namespace=~\"unleash.*\"}",
               "format": "table",
               "range": true,
               "refId": "A"
@@ -179,16 +186,15 @@ data:
         }
       ],
       "refresh": false,
-      "schemaVersion": 36,
-      "style": "dark",
+      "schemaVersion": 39,
       "tags": [],
       "templating": {
         "list": [
           {
             "current": {
-              "selected": false,
-              "text": "app-sre-stage-01-prometheus",
-              "value": "app-sre-stage-01-prometheus"
+              "selected": true,
+              "text": "appsrep07ue1-prometheus",
+              "value": "P7E8E1698DF0AC988"
             },
             "hide": 0,
             "includeAll": false,
@@ -205,14 +211,14 @@ data:
         ]
       },
       "time": {
-        "from": "now-5m",
+        "from": "now",
         "to": "now"
       },
       "timepicker": {},
       "timezone": "",
       "title": "Unleash Performance Overview",
       "uid": "6kpIaoM5z",
-      "version": 11,
+      "version": 1,
       "weekStart": ""
     }
 kind: ConfigMap
