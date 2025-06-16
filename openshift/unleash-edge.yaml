@@ -64,7 +64,7 @@ objects:
             - name: UPSTREAM_URL
               value: ${unleashUrl}
             - name: STRICT
-              value: ${STRICT}
+              value: "${STRICT}"
           ports:
           - name: unleash-edge
             containerPort: 3063
@@ -147,7 +147,8 @@ parameters:
 - name: IMAGE_PULL_SECRET
   value: quay.io
 - name: STRICT
-  value: true
+  value: "true"
+  description: Unleash edge behavior. More info https://docs.getunleash.io/reference/unleash-edge#edge-behaviors
 - name: issuer_name
   value: letsencrypt-prod-http
 - name: identifier
