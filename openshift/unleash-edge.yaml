@@ -63,6 +63,8 @@ objects:
                   key: INIT_CLIENT_API_TOKENS
             - name: UPSTREAM_URL
               value: ${unleashUrl}
+            - name: STRICT
+              value: ${STRICT}
           ports:
           - name: unleash-edge
             containerPort: 3063
@@ -131,7 +133,7 @@ parameters:
   displayName: unleash-edge image
   description: unleash-edge docker image. Defaults to quay.io/app-sre/unleash-edge
 - name: unleashEdgeVersion
-  value: v18.0.1
+  value: v19.11.2
   displayName: unleash-edge version
   description: unleash-edge version which defaults to latest
 - name: REPLICAS
@@ -144,6 +146,8 @@ parameters:
   value: 50m
 - name: IMAGE_PULL_SECRET
   value: quay.io
+- name: STRICT
+  value: true
 - name: issuer_name
   value: letsencrypt-prod-http
 - name: identifier
