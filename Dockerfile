@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/nodejs-18-minimal as base
+FROM registry.access.redhat.com/ubi8/nodejs-18-minimal@sha256:4fbc186feabefd318385b3fd89e6747125781174ebfdfb4197492ee819cf2b0a as base
 USER 1001
 COPY --chown=1001:0 package*.json .npmrc ./
 
