@@ -11,9 +11,7 @@ DOCKER_CONF="${PWD}/.docker"
 mkdir -p "${DOCKER_CONF}"
 docker --config="${DOCKER_CONF}" login -u="${QUAY_USER}" -p="${QUAY_TOKEN}" quay.io
 
-docker --config="${DOCKER_CONF}" build --target dev -t ${IMAGE_TEST} -f Dockerfile .
-docker run --rm ${IMAGE_TEST} npm run lint
-docker run --rm ${IMAGE_TEST} npm run test
+docker --config="${DOCKER_CONF}" build --target test -t ${IMAGE_TEST} -f Dockerfile .
 
 # Validate pko package
 docker --config="${DOCKER_CONF}" build --target test -t ${PKO_BUILD_TEST} -f pko/Dockerfile ./pko

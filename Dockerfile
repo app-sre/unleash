@@ -11,6 +11,7 @@ FROM builder AS test
 ENV NODE_ENV dev
 RUN npm ci
 COPY --chown=1001:0 . .
+RUN npm lint
 RUN npm test
 
 FROM base AS prod
