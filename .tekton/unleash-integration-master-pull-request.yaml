@@ -11,9 +11,9 @@ metadata:
   creationTimestamp: null
   labels:
     appstudio.openshift.io/application: unleash-master
-    appstudio.openshift.io/component: unleash-master
+    appstudio.openshift.io/component: unleash-integration-master
     pipelines.appstudio.openshift.io/type: build
-  name: unleash-master-on-pull-request
+  name: unleash-integration-master-on-pull-request
   namespace: app-sre-tenant
 spec:
   params:
@@ -22,15 +22,13 @@ spec:
   - name: revision
     value: '{{revision}}'
   - name: output-image
-    value: quay.io/redhat-user-workloads/app-sre-tenant/unleash-master/unleash-master:on-pr-{{revision}}
+    value: quay.io/redhat-user-workloads/app-sre-tenant/unleash-master/unleash-integration-master:on-pr-{{revision}}
   - name: image-expires-after
     value: 5d
   - name: dockerfile
-    value: Dockerfile
+    value: integration_test/Dockerfile
   - name: path-context
-    value: .
-  - name: target-stage
-    value: test
+    value: integration_test
   pipelineRef:
     params:
     - name: url
@@ -41,7 +39,7 @@ spec:
       value: pipelines/multi-arch-build-pipeline.yaml
     resolver: git
   taskRunTemplate:
-    serviceAccountName: build-pipeline-unleash-master
+    serviceAccountName: build-pipeline-unleash-integration-master
   workspaces:
   - name: workspace
     volumeClaimTemplate:
