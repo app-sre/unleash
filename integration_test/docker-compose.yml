@@ -2,7 +2,7 @@ version: "3.8"
 services:
   test:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: Dockerfile.integration
     env_file:
     - .env

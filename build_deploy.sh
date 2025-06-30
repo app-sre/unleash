@@ -16,8 +16,7 @@ docker --config="${DOCKER_CONF}" build -t "${IMAGE_NAME}:latest" .
 docker tag "${IMAGE_NAME}:latest" "${IMAGE_NAME}:${IMAGE_TAG}"
 
 docker --config="${DOCKER_CONF}" build -t "${IMAGE_NAME}:${INTEGRATION_TEST_IMAGE_TAG_PREFIX}${IMAGE_TAG}" \
-                                       -f integration_test/Dockerfile \
-                                       ./integration_test
+                                       -f Dockerfile.integration .
 
 docker --config="${DOCKER_CONF}" push "${IMAGE_NAME}:latest"
 docker --config="${DOCKER_CONF}" push "${IMAGE_NAME}:${IMAGE_TAG}"

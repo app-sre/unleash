@@ -18,6 +18,6 @@ docker --config="${DOCKER_CONF}" build --target test -t ${PKO_BUILD_TEST} -f pko
 # Test build final images
 docker --config="${DOCKER_CONF}" build -t ${IMAGE_TEST} -f Dockerfile .
 docker --config="${DOCKER_CONF}" build -t ${IMAGE_INTEGRATION_TEST} \
-                                       -f integration_test/Dockerfile \
-                                       ./integration_test
+                                       -f Dockerfile.integration .
+
 docker --config="${DOCKER_CONF}" build -t ${PKO_BUILD_TEST} -f pko/Dockerfile ./pko

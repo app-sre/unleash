@@ -1,0 +1,25 @@
+FROM registry.access.redhat.com/ubi9/ubi-minimal:9.6-1749489516 as base
+COPY LICENSE /licenses/LICENSE
+
+FROM base as downloader
+ENV K6_VERSION=0.47.0
+RUN microdnf install -y tar gzip && \
+    mkdir -p /tmp/k6 && \
+    curl -sfL https://github.com/grafana/k6/releases/download/v${K6_VERSION}/k6-v${K6_VERSION}-linux-amd64.tar.gz \
+    | tar -zxf - -C /tmp/k6 --strip-components=1 && \
+    chmod +x /tmp/k6/k6 && \
+    microdnf clean all
+
+FROM registry.access.redhat.com/ubi8/nodejs-18-minimal:1-144.1749483204@sha256:4fbc186feabefd318385b3fd89e6747125781174ebfdfb4197492ee819cf2b0a AS linter
+COPY package*.json .npmrc ./
+ENV  NODE_ENV dev
+RUN  npm ci
+COPY integration_test/test.js /test.js
+COPY LICENSE /licenses/LICENSE
+RUN npm run lint /test.js
+
+
+FROM base as production
+COPY --from=downloader /tmp/k6/k6 /usr/local/bin/k6
+COPY integration_test/test.js /test.js
+CMD ["k6","run", "/test.js"]
