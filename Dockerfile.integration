@@ -1,7 +1,7 @@
-FROM registry.access.redhat.com/ubi9/ubi-minimal:9.6-1749489516 as base
+FROM registry.access.redhat.com/ubi9/ubi-minimal:9.6-1749489516 AS base
 COPY LICENSE /licenses/LICENSE
 
-FROM base as downloader
+FROM base AS downloader
 ENV K6_VERSION=0.47.0
 RUN microdnf install -y tar gzip && \
     mkdir -p /tmp/k6 && \
