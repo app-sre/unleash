@@ -48,7 +48,7 @@ export function apiClientFeatures () {
 
   const res2 = http.get(API_CLIENT_FEATURES_URL, params)
 
-  check( {
+  check(res2, {
     'authenticated apiClientFeatures response code was 200': (res) => res.status === 200
   })
 }
