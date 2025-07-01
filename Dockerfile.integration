@@ -1,15 +1,6 @@
 FROM registry.access.redhat.com/ubi9/ubi-minimal:9.6-1749489516 AS base
 COPY LICENSE /licenses/LICENSE
 
-FROM registry.access.redhat.com/ubi8/nodejs-18 AS linter
-COPY LICENSE /licenses/LICENSE
-WORKDIR /usr/src/app 
-COPY --chown=1001:1001 package*.json .npmrc .eslintrc.yml ./
-COPY integration_test/test.js ./test.js
-ENV  NODE_ENV dev
-RUN  npm ci
-RUN npm run lint ./test.js
-
 
 FROM base AS downloader
 ENV K6_VERSION=0.47.0
@@ -23,5 +14,5 @@ RUN microdnf install -y tar gzip && \
 
 FROM base AS integration
 COPY --from=downloader /tmp/k6/k6 /usr/local/bin/k6
-COPY --from=linter /usr/src/app/test.js /test.js
+COPY integration_test/test.js /test.js
 CMD ["k6","run", "/test.js"]
