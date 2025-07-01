@@ -26,9 +26,9 @@ spec:
   - name: image-expires-after
     value: 5d
   - name: dockerfile
-    value: integration_test/Dockerfile
+    value: Dockerfile.integration
   - name: path-context
-    value: integration_test
+    value: .
   pipelineRef:
     params:
     - name: url

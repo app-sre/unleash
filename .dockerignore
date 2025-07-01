@@ -6,5 +6,4 @@ dashboards
 keycloak_data
 openshift
 pko
-integration_test
 .docker

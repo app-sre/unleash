@@ -24,9 +24,9 @@ spec:
   - name: output-image
     value: quay.io/redhat-user-workloads/app-sre-tenant/unleash-master/unleash-integration-master:{{revision}}
   - name: dockerfile
-    value: integration_test/Dockerfile
+    value: Dockerfile.integration
   - name: path-context
-    value: integration_test
+    value: .
   pipelineRef:
     params:
     - name: url
