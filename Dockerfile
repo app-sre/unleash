@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/nodejs-18-minimal:1-144.1749483204@sha256:4fbc186feabefd318385b3fd89e6747125781174ebfdfb4197492ee819cf2b0a AS base
+FROM registry.access.redhat.com/ubi8/nodejs-18-minimal:1-145@sha256:47c5528b5e0d533fd723749e853ceb5464a1b444286d5efc3bacbb4326112562 AS base
 COPY LICENSE /licenses/LICENSE
 USER 1001
 
