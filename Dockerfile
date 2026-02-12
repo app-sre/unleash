@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9/nodejs-20-minimal:9.7-1769430226@sha256:df3aa231f9e86f05ce8bd5b55a0ed391859313475ba41755b64c82156e498220 AS base
+FROM registry.access.redhat.com/ubi9/nodejs-20-minimal:9.7-1770308981@sha256:106ce430764e40e96f07fd085c77a3e8855f8183578d0651e762a51e13648cf3 AS base
 COPY LICENSE /licenses/LICENSE
 USER 1001
 
