@@ -26,9 +26,9 @@
     "unleash-server": "5.11.3"
   },
   "devDependencies": {
-    "eslint": "^8.57.0",
-    "eslint-config-standard": "^17.1.0",
-    "jest": "^30.0.0",
-    "supertest": "^6.3.4"
+    "eslint": "8.57.1",
+    "eslint-config-standard": "17.1.0",
+    "jest": "30.2.0",
+    "supertest": "6.3.4"
   }
 }

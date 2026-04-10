@@ -1,7 +1,7 @@
 ARG PKO_IMAGE_NAME=quay.io/app-sre/unleash-pko
 ARG IMAGE_TAG=latest
 
-FROM quay.io/app-sre/package-operator-cli:92430cd as base
+FROM quay.io/app-sre/package-operator-cli:92430cd@sha256:9e1eb7d2ea77ec96920a065970c5c228c41b01b6b3df0af8ff01010d1d69dc66 as base
 WORKDIR /tmp
 COPY . .
 
