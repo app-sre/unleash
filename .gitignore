@@ -2,3 +2,6 @@ node_modules/*
 node-debug.log
 pko/image.tgz
 .env
+scripts/output/
+__pycache__/
+*.pyc
