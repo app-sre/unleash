@@ -5,6 +5,7 @@ import json
 import os
 import sys
 import time
+from urllib.parse import urlparse
 
 import requests
 
@@ -529,6 +530,11 @@ def _require_env(name: str) -> str:
     return value
 
 
+def _instance_name_from_url(url: str) -> str:
+    """Derive a display name from a URL's hostname, e.g. https://ocm-stage.unleash.devshift.net -> ocm-stage."""
+    return urlparse(url).netloc.split(".")[0]
+
+
 def load_config(path: str) -> dict:
     """Load non-secret settings from `path` and instance url/token from the environment.
 
@@ -543,14 +549,16 @@ def load_config(path: str) -> dict:
     settings["export_file"] = os.path.join(config_dir, settings["export_file"])
     settings["split_dir"] = os.path.join(config_dir, settings["split_dir"])
 
+    v4_url = _require_env("V4_UNLEASH_URL")
+    v5_url = _require_env("V5_UNLEASH_URL")
     config["v4"] = {
-        "name": "v4 Integration",
-        "url": _require_env("V4_UNLEASH_URL"),
+        "name": _instance_name_from_url(v4_url),
+        "url": v4_url,
         "token": _require_env("V4_UNLEASH_TOKEN"),
     }
     config["v5"] = {
-        "name": "v5 Integration",
-        "url": _require_env("V5_UNLEASH_URL"),
+        "name": _instance_name_from_url(v5_url),
+        "url": v5_url,
         "token": _require_env("V5_UNLEASH_TOKEN"),
     }
 
