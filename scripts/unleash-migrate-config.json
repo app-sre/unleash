@@ -2,7 +2,7 @@
     "settings": {
         "export_file": "output/ocm.json",
         "split_dir": "output/unleash_split",
-        "batch_size": 30,
+        "batch_size": 20,
         "source_environment": "default",
         "target_environment": "production",
         "import_delay_seconds": 2,
