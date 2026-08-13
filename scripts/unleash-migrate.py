@@ -549,6 +549,10 @@ def load_config(path: str) -> dict:
     settings["export_file"] = os.path.join(config_dir, settings["export_file"])
     settings["split_dir"] = os.path.join(config_dir, settings["split_dir"])
 
+    batch_size_override = os.environ.get("UNLEASH_MIGRATE_BATCH_SIZE")
+    if batch_size_override:
+        settings["batch_size"] = int(batch_size_override)
+
     v4_url = _require_env("V4_UNLEASH_URL")
     v5_url = _require_env("V5_UNLEASH_URL")
     config["v4"] = {
