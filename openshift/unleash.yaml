@@ -211,8 +211,8 @@ parameters:
 - name: configSecret
   value: app-interface-config
 - name: ssoClientSecret
-  value: app-interface-sso-client
   description: The name of the secret that contains the managed SSO client credentials (client_id, client_secret, issuer)
+  required: true
 - name: databaseSecret
   value: app-interface-unleash-rds
 - name: host
