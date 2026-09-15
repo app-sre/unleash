@@ -2,8 +2,7 @@ const DATABASE_HOST = process.env.DATABASE_HOST
 const DATABASE_USERNAME = process.env.DATABASE_USERNAME
 const DATABASE_PASSWORD = process.env.DATABASE_PASSWORD
 const DATABASE_NAME = process.env.DATABASE_NAME
-const KC_HOST = process.env.KC_HOST
-const KC_REALM = process.env.KC_REALM
+const KC_ISSUER = process.env.KC_ISSUER
 const KC_CLIENT_ID = process.env.KC_CLIENT_ID
 const KC_CLIENT_SECRET = process.env.KC_CLIENT_SECRET
 const KC_ADMIN_ROLES = (process.env.KC_ADMIN_ROLES || '')
@@ -34,11 +33,8 @@ if (!DATABASE_PASSWORD) {
 if (!DATABASE_NAME) {
   throw new Error('DATABASE_NAME not set!')
 }
-if (!KC_HOST) {
-  throw new Error('KC_HOST not set!')
-}
-if (!KC_REALM) {
-  throw new Error('KC_REALM not set!')
+if (!KC_ISSUER) {
+  throw new Error('KC_ISSUER not set!')
 }
 if (!KC_CLIENT_ID) {
   throw new Error('KC_CLIENT_ID not set!')
@@ -52,8 +48,7 @@ module.exports = {
   DATABASE_USERNAME,
   DATABASE_PASSWORD,
   DATABASE_NAME,
-  KC_HOST,
-  KC_REALM,
+  KC_ISSUER,
   KC_CLIENT_ID,
   KC_CLIENT_SECRET,
   KC_ADMIN_ROLES,
