@@ -2,8 +2,7 @@ const { AuthenticationRequired } = require('unleash-server')
 const KeycloakStrategy = require('./lib/strategy.js')
 const passport = require('passport')
 const {
-  KC_HOST,
-  KC_REALM,
+  KC_ISSUER,
   KC_CLIENT_ID,
   KC_CLIENT_SECRET,
   KC_ADMIN_ROLES,
@@ -50,14 +49,13 @@ const enableKeycloakOauth = (app, config, services) => {
     'keycloak',
     new KeycloakStrategy(
       {
-        host: KC_HOST,
-        realm: KC_REALM,
+        issuer: KC_ISSUER,
         clientID: KC_CLIENT_ID,
         clientSecret: KC_CLIENT_SECRET,
         callbackURL: `${baseUriPath}/api/auth/callback`,
-        authorizationURL: `${KC_HOST}/realms/${KC_REALM}/protocol/openid-connect/auth`,
-        tokenURL: `${KC_HOST}/realms/${KC_REALM}/protocol/openid-connect/token`,
-        userInfoURL: `${KC_HOST}/realms/${KC_REALM}/protocol/openid-connect/userinfo`
+        authorizationURL: `${KC_ISSUER}/protocol/openid-connect/auth`,
+        tokenURL: `${KC_ISSUER}/protocol/openid-connect/token`,
+        userInfoURL: `${KC_ISSUER}/protocol/openid-connect/userinfo`
       },
 
       async (accessToken, refreshToken, profile, done) => {

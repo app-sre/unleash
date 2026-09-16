@@ -17,8 +17,7 @@ Database:
 
 Keycloak:
 
-- `KC_HOST`: The Keycloak url.
-- `KC_REALM`: The Keycloak realm.
+- `KC_ISSUER`: The OIDC issuer url (e.g. `https://host/realms/realm-name`).
 - `KC_CLIENT_ID`: The Keycloak client id.
 - `KC_CLIENT_SECRET`: The Keycloak client secret.
 - `KC_ADMIN_ROLES`: The Keycloak admin roles, separated by comma.

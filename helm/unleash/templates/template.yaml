@@ -86,27 +86,22 @@ objects:
                 secretKeyRef:
                   name: ${databaseSecret}
                   key: db.name
-            # keycloak settings
-            - name: KC_HOST
+            # sso client settings
+            - name: KC_ISSUER
               valueFrom:
                 secretKeyRef:
-                  name: ${configSecret}
-                  key: KC_HOST
-            - name: KC_REALM
-              valueFrom:
-                secretKeyRef:
-                  name: ${configSecret}
-                  key: KC_REALM
+                  name: ${ssoClientSecret}
+                  key: issuer
             - name: KC_CLIENT_ID
               valueFrom:
                 secretKeyRef:
-                  name: ${configSecret}
-                  key: KC_CLIENT_ID
+                  name: ${ssoClientSecret}
+                  key: client_id
             - name: KC_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: ${configSecret}
-                  key: KC_CLIENT_SECRET
+                  name: ${ssoClientSecret}
+                  key: client_secret
             # roles
             - name: KC_ADMIN_ROLES
               value: ${admin_roles}
@@ -231,6 +226,9 @@ parameters:
   value: app-interface
 - name: configSecret
   value: app-interface-config
+- name: ssoClientSecret
+  description: The name of the secret that contains the managed SSO client credentials (client_id, client_secret, issuer)
+  required: true
 - name: databaseSecret
   value: app-interface-unleash-rds
 - name: host
