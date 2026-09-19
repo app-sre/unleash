@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9/ubi-minimal:9.7-1778461551@sha256:fe9e574f04371b333ed4e21d30d984f6b7fcd1046e579f5ddab4816c0c8e231d AS base
+FROM registry.access.redhat.com/ubi9/ubi-minimal:9.8-1789546276@sha256:7b8e25a1b56ca4d00219198f3b5b51a3e1693a5c4f5369c5e190d7d6cb3f980e AS base
 COPY LICENSE /licenses/LICENSE
 
 
