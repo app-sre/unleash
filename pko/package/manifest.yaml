@@ -40,7 +40,7 @@ spec:
             image:
               type: string
               description: reference to the image containing unleash
-              default: quay.io/app-sre/unleash
+              default: quay.io/redhat-services-prod/app-sre-tenant/unleash-master/unleash-master
             imageTag:
               type: string
               description: tag of the image containing unleash

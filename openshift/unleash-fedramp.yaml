@@ -202,9 +202,9 @@ objects:
 
 parameters:
 - name: IMAGE
-  value: quay.io/app-sre/unleash
+  value: quay.io/redhat-services-prod/app-sre-tenant/unleash-master/unleash-master
   displayName: unleash image
-  description: unleash docker image. Defaults to quay.io/app-sre/unleash
+  description: unleash docker image. Defaults to quay.io/redhat-services-prod/app-sre-tenant/unleash-master/unleash-master
 - name: IMAGE_TAG
   value: latest
   displayName: unleash version
