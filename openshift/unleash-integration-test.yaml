@@ -42,7 +42,7 @@ parameters:
 - name: IMAGE
   value: quay.io/redhat-services-prod/app-sre-tenant/unleash-master/unleash-integration-master
 - name: IMAGE_TAG_PREFIX
-  value: 'integration-test-'
+  value: ''
 - name: IMAGE_TAG
   value: ''
   required: true
