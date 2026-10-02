@@ -40,7 +40,7 @@ objects:
               memory: ${MEMORY_LIMIT}
 parameters:
 - name: IMAGE
-  value: quay.io/app-sre/unleash
+  value: quay.io/redhat-services-prod/app-sre-tenant/unleash-master/unleash-integration-master
 - name: IMAGE_TAG_PREFIX
   value: 'integration-test-'
 - name: IMAGE_TAG
