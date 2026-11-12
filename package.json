@@ -24,7 +24,7 @@
     "jwks-rsa": "^2.1.5",
     "passport": "^0.7.0",
     "passport-oauth2": "^1.8.0",
-    "unleash-server": "^5.12.8"
+    "unleash-server": "^8.0.0"
   },
   "devDependencies": {
     "eslint": "8.57.1",
